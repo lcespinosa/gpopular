@@ -21,19 +21,18 @@ class CreateDemandsTable extends Migration
             $table->text('content')->nullable();
             $table->timestamps();
 
-            $table->foreignId('type_id')
+            $table->foreignId('type_id')->default(1)
+                ->nullable()
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->foreignId('way_id')
+            $table->foreignId('way_id')->default(1)
+                ->nullable()
                 ->constrained()
                 ->nullOnDelete();
 
             $table->foreignId('contact_id')
-                ->constrained()
-                ->nullOnDelete();
-
-            $table->foreignId('topic_id')
+                ->nullable()
                 ->constrained()
                 ->nullOnDelete();
         });

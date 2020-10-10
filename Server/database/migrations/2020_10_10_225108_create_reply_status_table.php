@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressesTable extends Migration
+class CreateReplyStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,24 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('reply_status', function (Blueprint $table) {
             $table->id();
-            $table->string('building', 25)->nullable();
-            $table->string('apartment', 25)->nullable();
-            $table->string('number', 25)->nullable();
-            $table->boolean('active')->default(true);
+            $table->text('description');
+
+            $table->foreignId('status_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('functionary_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            $table->foreignId('reply_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table->timestamps();
-
-            $table->foreignId('street_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
-            $table->foreignId('contact_id')
-                ->constrained()
-                ->cascadeOnDelete();
         });
     }
 
@@ -38,6 +41,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('reply_status');
     }
 }

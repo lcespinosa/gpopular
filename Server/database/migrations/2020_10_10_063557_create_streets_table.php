@@ -19,9 +19,21 @@ class CreateStreetsTable extends Migration
             $table->string('code', 50)->unique();
             $table->timestamps();
 
-            $table->foreignId('gpopular_id')
+            $table->foreignId('cpopular_id')
                 ->constrained()
                 ->cascadeOnDelete();
+
+            $table->unsignedBigInteger('first_between_id')->nullable();
+            $table->foreign('first_between_id')
+                ->references('id')
+                ->on('streets')
+                ->nullOnDelete();
+
+            $table->unsignedBigInteger('second_between_id')->nullable();
+            $table->foreign('second_between_id')
+                ->references('id')
+                ->on('streets')
+                ->nullOnDelete();
         });
     }
 

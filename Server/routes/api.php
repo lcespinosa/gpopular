@@ -16,3 +16,19 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group([
+
+    'prefix' => 'auth'
+
+], function () use ($router) {
+
+    $router->post('login', 'AuthController@login');
+    $router->post('refresh', 'AuthController@refresh');
+
+    $router->post('logout', 'UserController@logout');
+    $router->post('profile', 'UserController@profile');
+    $router->get('users/{id}', 'UserController@singleUser');
+    $router->get('users', 'UserController@allUsers');
+
+});
