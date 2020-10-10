@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "demo2-app": {
+    "gpopular-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -71,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo2-app:build"
+            "browserTarget": "gpopular-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo2-app:build:production"
+              "browserTarget": "gpopular-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo2-app:build"
+            "browserTarget": "gpopular-app:build"
           }
         },
         "test": {
@@ -112,18 +112,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "demo2-app:serve"
+            "devServerTarget": "gpopular-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "demo2-app:serve:production"
+              "devServerTarget": "gpopular-app:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "demo2-app",
+  "defaultProject": "gpopular-app",
   "cli": {
     "analytics": false
   }
