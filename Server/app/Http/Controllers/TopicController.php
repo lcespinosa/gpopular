@@ -38,7 +38,7 @@ class TopicController extends Controller
         $topic = new Topic([
             'name'              => $request->name,
             'code'              => $request->code,
-            'has_resources'     => $request->has_resources,
+            'has_resources'     => $request->has_resources ?? false,
         ]);
         $agency->topics()->save($topic);
 
@@ -57,7 +57,7 @@ class TopicController extends Controller
         $topic->fill([
             'name'              => $request->name,
             'code'              => $request->code,
-            'has_resources'     => $request->has_resources,
+            'has_resources'     => $request->has_resources ?? false,
         ])->save();
 
         return response()->json(compact('topic'));

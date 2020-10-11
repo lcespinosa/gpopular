@@ -15,8 +15,8 @@ class CreateFunctionariesTable extends Migration
     {
         Schema::create('functionaries', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 25);
-            $table->string('last_name', 25)->nullable();
+            $table->string('name', 30);
+            $table->string('last_name', 50)->nullable();
             $table->string('nick', 25)->nullable();
             $table->json('phones')->nullable();
             $table->boolean('is_relevant')->default(false);

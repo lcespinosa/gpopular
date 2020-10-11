@@ -16,7 +16,8 @@ class Functionary extends Model
     ];
 
     protected $casts = [
-        'phones'    => 'array'
+        'phones'    => 'array',
+        'is_relevant'   => 'boolean',
     ];
 
     public function agency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
