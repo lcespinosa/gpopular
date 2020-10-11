@@ -28,6 +28,8 @@ class CreateAddressesTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+//            $table->unique(['street_id', 'contact_id']);
+
             $table->timestamps();
         });
     }

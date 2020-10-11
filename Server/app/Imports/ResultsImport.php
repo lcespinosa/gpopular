@@ -4,12 +4,12 @@
 namespace App\Imports;
 
 
-use App\Models\Status;
+use App\Models\Result;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class StatusesImport implements ToModel
+class ResultsImport implements ToModel
 {
 
     /**
@@ -20,7 +20,7 @@ class StatusesImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
-        $model = Status::firstOrCreate([
+        $model = Result::firstOrCreate([
             'name'  => $str,
             'code'  => Str::snake($str),
         ]);

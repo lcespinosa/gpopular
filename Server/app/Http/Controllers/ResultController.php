@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Status;
+use App\Models\Result;
 use Illuminate\Http\Request;
 
-class StatusController extends Controller
+class ResultController extends Controller
 {
     /**
      * Instantiate a new UserController instance.
@@ -19,54 +19,54 @@ class StatusController extends Controller
 
     public function index()
     {
-        $statuses = Status::all(['id', 'name']);
+        $results = Result::all(['id', 'name']);
 
-        return response()->json(compact('statuses'));
+        return response()->json(compact('results'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:50|unique:statuses',
+            'code'      => 'required|string|max:50|unique:results',
         ]);
 
-        $status = new Status([
+        $result = new Result([
             'name'              => $request->name,
             'code'              => $request->code,
         ]);
-        $status->save();
+        $result->save();
 
-        return response()->json(compact('status'));
+        return response()->json(compact('result'));
     }
 
-    public function update(Request $request, $status)
+    public function update(Request $request, $result)
     {
-        $status = Status::findOrFail($status);
+        $result = Result::findOrFail($result);
 
         $this->validate($request, [
             'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:50|unique:status,code,' . $status->id,
+            'code'      => 'required|string|max:50|unique:results,code,' . $result->id,
         ]);
 
-        $status->fill([
+        $result->fill([
             'name'              => $request->name,
             'code'              => $request->code,
         ])->save();
 
-        return response()->json(compact('status'));
+        return response()->json(compact('result'));
     }
 
-    public function show($status)
+    public function show($result)
     {
-        $status = Status::findOrFail($status);
-        return response()->json(compact('status'));
+        $result = Result::findOrFail($result);
+        return response()->json(compact('result'));
     }
 
-    public function delete($status)
+    public function delete($result)
     {
-        $status = Status::findOrFail($status);
-        $status->delete();
+        $result = Result::findOrFail($result);
+        $result->delete();
         return response()->json([
             'code'      => '200_01'
         ]);

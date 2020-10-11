@@ -16,6 +16,7 @@ class Demand extends Model
 
         'type_id',
         'way_id',
+        'demand_case_id',
     ];
 
     protected $casts = [
@@ -42,9 +43,16 @@ class Demand extends Model
         return $this->belongsTo(DemandCase::class);
     }
 
-    public function reply(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasOne(Reply::class);
+        return $this->hasMany(Reply::class);
+    }
+
+    public function accepted_replies(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Reply::class)
+            ->latest()
+            ->where('accepted', true);
     }
 
     public function contact()

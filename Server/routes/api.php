@@ -60,7 +60,7 @@ $router->group([
     $router->get('/agencies/{agency}', 'AgencyController@show');
     $router->delete('/agencies/{agency}', 'AgencyController@delete');
 
-    //TOPICS
+    //TYPES
     $router->get('/types', 'TypeController@index');
     $router->post('/types', 'TypeController@store');
     $router->put('/types/{type}', 'TypeController@update');
@@ -75,11 +75,11 @@ $router->group([
     $router->delete('/ways/{way}', 'WayController@delete');
 
     //STATUS
-    $router->get('/statuses', 'StatusController@index');
-    $router->post('/statuses', 'StatusController@store');
-    $router->put('/statuses/{status}', 'StatusController@update');
-    $router->get('/statuses/{status}', 'StatusController@show');
-    $router->delete('/statuses/{status}', 'StatusController@delete');
+    $router->get('/results', 'ResultController@index');
+    $router->post('/results', 'ResultController@store');
+    $router->put('/results/{result}', 'ResultController@update');
+    $router->get('/results/{result}', 'ResultController@show');
+    $router->delete('/results/{result}', 'ResultController@delete');
 
     //REASON TYPES
     $router->get('/reason_types', 'ReasonTypeController@index');
@@ -87,5 +87,73 @@ $router->group([
     $router->put('/reason_types/{reason_type}', 'ReasonTypeController@update');
     $router->get('/reason_types/{reason_type}', 'ReasonTypeController@show');
     $router->delete('/reason_types/{reason_type}', 'ReasonTypeController@delete');
+
+    //DEMAND CASES
+    $router->get('/demand_cases', 'DemandCaseController@index');
+    $router->post('/demand_cases', 'DemandCaseController@store');
+    $router->put('/demand_cases/{demand_case}', 'DemandCaseController@update');
+    $router->get('/demand_cases/{demand_case}', 'DemandCaseController@show');
+    $router->delete('/demand_cases/{demand_case}', 'DemandCaseController@delete');
+
+});
+
+$router->group([
+
+    'prefix' => 'localization'
+
+], function () use ($router) {
+
+    //C POPULARS
+    $router->get('/cpopulars', 'CPopularController@index');
+    $router->post('/cpopulars', 'CPopularController@store');
+    $router->put('/cpopulars/{cpopular}', 'CPopularController@update');
+    $router->get('/cpopulars/{cpopular}', 'CPopularController@show');
+    $router->delete('/cpopulars/{cpopular}', 'CPopularController@delete');
+
+    //STREETS
+    $router->get('/streets', 'StreetController@index');
+    $router->post('/streets', 'StreetController@store');
+    $router->put('/streets/{street}', 'StreetController@update');
+    $router->get('/streets/{street}', 'StreetController@show');
+    $router->get('/streets/{street}/contacts', 'StreetController@contacts');
+    $router->delete('/streets/{street}', 'StreetController@delete');
+
+    //CONTACTS
+    $router->get('/contacts', 'ContactController@index');
+    $router->post('/contacts', 'ContactController@store');
+    $router->put('/contacts/{contact}', 'ContactController@update');
+    $router->get('/contacts/{contact}', 'ContactController@show');
+    $router->delete('/contacts/{contact}', 'ContactController@delete');
+    $router->get('/anonymous', 'ContactController@anonymous');
+
+    //ADDRESSES
+    $router->get('/addresses', 'AddressController@index');
+    $router->post('/addresses', 'AddressController@store');
+    $router->put('/addresses/{address}', 'AddressController@update');
+    $router->get('/addresses/{address}', 'AddressController@show');
+    $router->delete('/addresses/{address}', 'AddressController@delete');
+
+});
+
+$router->group([
+
+    'prefix' => 'management'
+
+], function () use ($router) {
+
+    //DEMANDS
+    $router->get('/demands', 'DemandController@index');
+    $router->post('/demands', 'DemandController@store');
+    $router->put('/demands/{demand}', 'DemandController@update');
+    $router->get('/demands/{demand}', 'DemandController@show');
+    $router->get('/demands/{demand}/replies', 'DemandController@replies');
+    $router->delete('/demands/{demand}', 'DemandController@delete');
+
+    //REPLIES
+    $router->get('/replies', 'ReplyController@index');
+    $router->post('/replies', 'ReplyController@store');
+    $router->put('/replies/{reply}', 'ReplyController@update');
+    $router->get('/replies/{reply}', 'ReplyController@show');
+    $router->delete('/replies/{reply}', 'ReplyController@delete');
 
 });

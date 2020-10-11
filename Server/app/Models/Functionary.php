@@ -25,8 +25,8 @@ class Functionary extends Model
         return $this->belongsTo(Agency::class);
     }
 
-    public function replies_statuses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(ReplyStatus::class, 'functionary_id');
+        return $this->hasMany(Reply::class);
     }
 }

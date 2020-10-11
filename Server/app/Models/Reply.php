@@ -7,13 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Reply extends Model
 {
     protected $fillable = [
+        'description',
+        'accepted',
         'send_date',
         'reply_date',
+
+        'reason_type_id',
+        'result_id',
+        'functionary_id',
     ];
 
     protected $casts = [
         'send_date' => 'datetime: d-m-Y',
         'reply_date' => 'datetime: d-m-Y',
+        'accepted'  => 'boolean',
     ];
 
     public function reason_type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -26,21 +33,13 @@ class Reply extends Model
         return $this->belongsTo(Demand::class);
     }
 
-    public function replies_statuses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function functionary(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasMany(ReplyStatus::class, 'reply_id');
+        return $this->belongsTo(Functionary::class);
     }
 
-    public function reply_status(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function result(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(ReplyStatus::class, 'reply_id')
-            ->latest();
-    }
-
-    public function reply_status_finished(): \Illuminate\Database\Eloquent\Relations\HasOne
-    {
-        return $this->hasOne(ReplyStatus::class, 'reply_id')
-            ->latest()
-            ->where('finished', true);
+        return $this->belongsTo(Result::class);
     }
 }

@@ -16,7 +16,7 @@ class SeedersImport implements WithMultipleSheets
     {
         return [
             'Consejos'              => new CPopularsImport(),
-            'Estados de Denuncia'   => new StatusesImport(),
+            'Estados de Denuncia'   => new ResultsImport(),
             'Vias de Denuncia'      => new WaysImport(),
             'Tipos de Denuncia'     => new TypesImport(),
             'Casos de Denuncia'     => new CasesImport(),

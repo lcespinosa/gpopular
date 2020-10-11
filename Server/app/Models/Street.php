@@ -21,7 +21,8 @@ class Street extends Model
 
     public function addresses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Address::class, 'main_street_id');
+        return $this->hasMany(Address::class)
+            ->where('active', true);
     }
 
     public function first_between_street(): \Illuminate\Database\Eloquent\Relations\BelongsTo

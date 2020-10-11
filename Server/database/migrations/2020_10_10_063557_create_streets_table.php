@@ -15,8 +15,8 @@ class CreateStreetsTable extends Migration
     {
         Schema::create('streets', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
-            $table->string('code', 50)->unique();
+            $table->string('name', 100);
+            $table->string('code', 100)->unique();
 
             $table->foreignId('cpopular_id')
                 ->constrained()

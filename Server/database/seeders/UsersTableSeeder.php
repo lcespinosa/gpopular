@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
@@ -19,12 +20,20 @@ class UsersTableSeeder extends Seeder
     {
         Model::unguard();
         DB::table('users')->delete();
+        DB::table('contacts')->delete();
         Model::reguard();
 
         User::firstOrCreate([
             'name'      => 'Admin',
             'username'  => 'admin',
             'password'  => Hash::make('a'),
+        ]);
+
+        Contact::firstOrCreate([
+            'name'          => 'Anonymous',
+            'last_name'     => '',
+            'phones'        => '',
+            'anonymous'     => true,
         ]);
     }
 }
