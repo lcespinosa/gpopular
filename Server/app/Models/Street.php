@@ -16,7 +16,7 @@ class Street extends Model
 
     public function cpopular(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(CPopular::class);
+        return $this->belongsTo(CPopular::class, 'cpopular_id');
     }
 
     public function addresses(): \Illuminate\Database\Eloquent\Relations\HasMany

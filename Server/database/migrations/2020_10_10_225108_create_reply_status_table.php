@@ -15,6 +15,7 @@ class CreateReplyStatusTable extends Migration
     {
         Schema::create('reply_status', function (Blueprint $table) {
             $table->id();
+            $table->boolean('finished')->default(false);
             $table->text('description');
 
             $table->foreignId('status_id')

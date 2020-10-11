@@ -15,9 +15,10 @@ class CreateContactsTable extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 25);
+            $table->string('name', 25); //Anonimo
             $table->string('last_name', 25)->nullable();
             $table->json('phones')->nullable();
+            $table->boolean('anonymous')->default(false);
             $table->timestamps();
         });
     }

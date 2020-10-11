@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CPopular extends Model
 {
+    protected $table = 'cpopulars';
+
     protected $fillable = [
         'name',
         'code',
@@ -13,6 +15,6 @@ class CPopular extends Model
 
     public function streets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Street::class);
+        return $this->hasMany(Street::class, 'cpopular_id');
     }
 }

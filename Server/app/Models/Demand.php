@@ -10,10 +10,16 @@ class Demand extends Model
         'page',
         'number',
         'expedient',
+        'reception_date',
         'content',
+        'is_demand',
 
         'type_id',
         'way_id',
+    ];
+
+    protected $casts = [
+        'reception_date'    => 'datetime: d-m-Y',
     ];
 
     public function topics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -31,8 +37,18 @@ class Demand extends Model
         return $this->belongsTo(Way::class);
     }
 
+    public function demand_case(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(DemandCase::class);
+    }
+
     public function reply(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Reply::class);
+    }
+
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
     }
 }

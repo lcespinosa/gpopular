@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRepliesTable extends Migration
+class CreateDemandCasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateRepliesTable extends Migration
      */
     public function up()
     {
-        Schema::create('replies', function (Blueprint $table) {
+        Schema::create('demand_cases', function (Blueprint $table) {
             $table->id();
-            $table->date('send_date');
-            $table->date('reply_date')->nullable();
-
-            $table->foreignId('reason_type_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
+            $table->string('name', 25);
+            $table->string('code', 25)->unique();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ class CreateRepliesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('replies');
+        Schema::dropIfExists('demand_cases');
     }
 }

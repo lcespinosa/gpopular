@@ -19,7 +19,6 @@ class CreateAddressesTable extends Migration
             $table->string('apartment', 25)->nullable();
             $table->string('number', 25)->nullable();
             $table->boolean('active')->default(true);
-            $table->timestamps();
 
             $table->foreignId('street_id')
                 ->constrained()
@@ -28,6 +27,8 @@ class CreateAddressesTable extends Migration
             $table->foreignId('contact_id')
                 ->constrained()
                 ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

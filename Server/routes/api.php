@@ -32,3 +32,17 @@ $router->group([
     $router->get('users', 'UserController@allUsers');
 
 });
+
+$router->group([
+
+    'prefix' => 'nomenclature'
+
+], function () use ($router) {
+
+    $router->get('/topics', 'TopicController@index');
+    $router->post('/topics', 'TopicController@store');
+    $router->put('/topics/{topic}', 'TopicController@update');
+    $router->get('/topics/{topic}', 'TopicController@show');
+    $router->delete('/topics/{topic}', 'TopicController@delete');
+
+});

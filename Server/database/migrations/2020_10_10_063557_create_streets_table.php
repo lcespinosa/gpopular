@@ -17,7 +17,6 @@ class CreateStreetsTable extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('code', 50)->unique();
-            $table->timestamps();
 
             $table->foreignId('cpopular_id')
                 ->constrained()
@@ -34,6 +33,8 @@ class CreateStreetsTable extends Migration
                 ->references('id')
                 ->on('streets')
                 ->nullOnDelete();
+
+            $table->timestamps();
         });
     }
 

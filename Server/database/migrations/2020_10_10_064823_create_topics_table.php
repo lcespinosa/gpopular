@@ -15,14 +15,15 @@ class CreateTopicsTable extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 25);
+            $table->string('name', 50);
             $table->string('code', 25)->unique();
             $table->boolean('has_resources')->default(false);
-            $table->timestamps();
 
             $table->foreignId('agency_id')
                 ->constrained()
                 ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

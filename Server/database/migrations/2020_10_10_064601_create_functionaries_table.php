@@ -21,11 +21,12 @@ class CreateFunctionariesTable extends Migration
             $table->json('phones')->nullable();
             $table->boolean('is_relevant')->default(false);
             $table->string('occupation')->nullable();
-            $table->timestamps();
 
             $table->foreignId('agency_id')
                 ->constrained()
                 ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

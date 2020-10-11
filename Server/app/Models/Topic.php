@@ -12,6 +12,10 @@ class Topic extends Model
         'has_resources',
     ];
 
+    protected $casts = [
+        'has_resources' => 'boolean'
+    ];
+
     public function agency()
     {
         return $this->belongsTo(Agency::class);

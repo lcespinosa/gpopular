@@ -36,4 +36,11 @@ class Reply extends Model
         return $this->hasOne(ReplyStatus::class, 'reply_id')
             ->latest();
     }
+
+    public function reply_status_finished(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ReplyStatus::class, 'reply_id')
+            ->latest()
+            ->where('finished', true);
+    }
 }

@@ -10,6 +10,7 @@ class Contact extends Model
         'name',
         'last_name',
         'phones',
+        'anonymous',
     ];
 
     protected $casts = [

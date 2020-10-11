@@ -18,23 +18,28 @@ class CreateDemandsTable extends Migration
             $table->string('page');
             $table->string('number');
             $table->string('expedient')->nullable();
+            $table->date('reception_date')->nullable();
             $table->text('content')->nullable();
-            $table->timestamps();
+            $table->boolean('is_demand')->default(false);
 
             $table->foreignId('type_id')->default(1)
-                ->nullable()
                 ->constrained()
-                ->nullOnDelete();
+                ->cascadeOnDelete();
 
             $table->foreignId('way_id')->default(1)
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('demand_case_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
 
             $table->foreignId('contact_id')
-                ->nullable()
                 ->constrained()
-                ->nullOnDelete();
+                ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

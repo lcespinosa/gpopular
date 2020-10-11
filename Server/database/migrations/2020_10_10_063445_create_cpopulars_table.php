@@ -28,6 +28,6 @@ class CreateCpopularsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gpopulars');
+        Schema::dropIfExists('cpopulars');
     }
 }

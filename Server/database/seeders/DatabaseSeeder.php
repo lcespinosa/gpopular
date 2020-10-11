@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Imports\SeedersImport;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,15 +19,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-//         $this->call('UsersTableSeeder');
-        Model::unguard();
-        DB::table('users')->delete();
-        Model::reguard();
+         $this->call(UsersTableSeeder::class);
 
-        User::firstOrCreate([
-            'name'      => 'Admin',
-            'username'  => 'admin',
-            'password'  => Hash::make('a'),
-        ]);
+         $import = new SeedersImport();
+         Excel::import($import, 'seeds/nomenclature.xlsx');
     }
 }
