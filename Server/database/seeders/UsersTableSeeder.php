@@ -26,7 +26,8 @@ class UsersTableSeeder extends Seeder
         User::firstOrCreate([
             'name'      => 'Admin',
             'username'  => 'admin',
-            'password'  => Hash::make('a'),
+            'password'  => Hash::make('admin123'),
+            'is_admin'  => true,
         ]);
 
         Contact::firstOrCreate([

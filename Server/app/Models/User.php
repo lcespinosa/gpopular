@@ -23,6 +23,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'name',
         'username',
         'password',
+        'is_admin',
 //        'email',
     ];
 
@@ -33,6 +34,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+    ];
+
+    protected $casts = [
+        'is_admin'  => 'boolean'
     ];
 
     /**

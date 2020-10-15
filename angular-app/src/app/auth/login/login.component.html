@@ -1,0 +1,47 @@
+<div class="container login-container" fxLayout="row" fxLayoutAlign="center center">
+    <form [formGroup]="loginForm" fxFlex="30%" fxFlex.sm="50%" fxFlex.xs="90%">
+        <mat-card>
+            <mat-card-title>Gobierno - Atención a la población</mat-card-title>
+            <mat-card-subtitle>Acceder a la cuenta</mat-card-subtitle>
+            <mat-card-content>
+
+                <mat-form-field class="full-width">
+                    <input id="usernameInput" matInput placeholder="Usuario" formControlName="username" autocomplete="username"
+                        type="text">
+
+                    <mat-error id="invalidUsernameError" *ngIf="loginForm.controls['username'].hasError('username')">
+                        Por favor ingrese un nombre de usuario válido
+                    </mat-error>
+                    <mat-error id="requiredUsernameError" *ngIf="loginForm.controls['username'].hasError('required')">
+                        El usuario es
+                        <strong>requerido</strong>
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <input id="passwordInput" matInput placeholder="Contraseña" formControlName="password" type="password"
+                        autocomplete="current-password">
+                    <mat-error id="requiredPasswordError" *ngIf="loginForm.controls['password'].hasError('required')">
+                        La contraseña es
+                        <strong>requerida</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="full-width">
+                    <mat-slide-toggle formControlName="rememberMe">Recordar mi sesión</mat-slide-toggle>
+                </div>
+
+            </mat-card-content>
+
+            <mat-card-actions class="login-actions">
+                <button mat-raised-button id="login" color="primary" [disabled]="loginForm.invalid || loading"
+                    (click)="login()">Acceder</button>
+<!--                <button mat-button id="resetPassword" (click)="resetPassword()" type="button">Reset Password</button>-->
+            </mat-card-actions>
+
+        </mat-card>
+
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    </form>
+</div>
