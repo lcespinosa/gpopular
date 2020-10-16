@@ -14,6 +14,11 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'cpopulars',
+        loadChildren: './cpopulars/cpopulars.module#CpopularsModule',
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'customers',
         loadChildren: './customers/customers.module#CustomersModule',
         canActivate: [AuthGuard]
