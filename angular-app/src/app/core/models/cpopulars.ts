@@ -1,6 +1,7 @@
 export class Cpopular {
-    _id:        string;
+    _id:        number;
     name:       string;
     code:       string;
-    created_at: string;
+    created_at: Date;
+    updated_at: Date;
 }

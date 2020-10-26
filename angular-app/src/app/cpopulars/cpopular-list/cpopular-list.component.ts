@@ -18,7 +18,7 @@ export class CpopularListComponent implements OnInit {
   ngOnInit() {
     this.cpopularsApi.getCpopulars()
         .subscribe((response: any) => {
-          this.data = response;
+          this.data = response.cpopulars;
           console.log(this.data);
           this.isLoadingResults = false;
         }, error => {
@@ -26,5 +26,4 @@ export class CpopularListComponent implements OnInit {
           this.isLoadingResults = false;
         });
   }
-
 }

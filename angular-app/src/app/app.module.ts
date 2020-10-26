@@ -25,7 +25,7 @@ import { environment } from '../environments/environment';
       serverLoggingUrl: `http://my-api/logs`,
       level: environment.logLevel,
       serverLogLevel: environment.serverLogLevel
-    })
+    }),
   ],
   bootstrap: [AppComponent]
 })

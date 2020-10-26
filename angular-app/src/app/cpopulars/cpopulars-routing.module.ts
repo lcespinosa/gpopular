@@ -13,9 +13,9 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', component: CpopularListComponent },
-      { path: '/add', component: CpopularAddComponent },
-      { path: '/edit', component: CpopularEditComponent },
-      { path: '/details', component: CpopularDetailComponent },
+      { path: 'add', component: CpopularAddComponent },
+      { path: 'edit/:id', component: CpopularEditComponent },
+      { path: 'details/:id', component: CpopularDetailComponent },
     ]
   }
 ];
