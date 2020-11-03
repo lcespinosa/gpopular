@@ -1,5 +1,5 @@
 export class Cpopular {
-    _id:        number;
+    id:         number;
     name:       string;
     code:       string;
     created_at: Date;

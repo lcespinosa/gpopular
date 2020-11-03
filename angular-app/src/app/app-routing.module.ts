@@ -19,6 +19,21 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'entities',
+        loadChildren: './entities/entities.module#EntitiesModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'topics',
+        loadChildren: './topics/topics.module#TopicsModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'functionaries',
+        loadChildren: './functionaries/functionaries.module#FunctionariesModule',
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'customers',
         loadChildren: './customers/customers.module#CustomersModule',
         canActivate: [AuthGuard]

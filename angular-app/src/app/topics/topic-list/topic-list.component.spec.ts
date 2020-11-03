@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CpopularAddComponent } from './cpopular-add.component';
+import { TopicListComponent } from './topic-list.component';
 
-describe('CpopularAddComponent', () => {
-  let component: CpopularAddComponent;
-  let fixture: ComponentFixture<CpopularAddComponent>;
+describe('TopicListComponent', () => {
+  let component: TopicListComponent;
+  let fixture: ComponentFixture<TopicListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CpopularAddComponent ]
+      declarations: [ TopicListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CpopularAddComponent);
+    fixture = TestBed.createComponent(TopicListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

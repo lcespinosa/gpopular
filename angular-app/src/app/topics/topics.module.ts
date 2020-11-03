@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CpopularsRoutingModule } from './cpopulars-routing.module';
+import { TopicsRoutingModule } from './topics-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { CpopularListComponent } from './cpopular-list/cpopular-list.component';
+import { TopicListComponent } from './topic-list/topic-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    CpopularsRoutingModule,
+    TopicsRoutingModule,
     SharedModule
   ],
   declarations: [
-    CpopularListComponent,
+    TopicListComponent,
   ],
   entryComponents: [
   ]
 })
-export class CpopularsModule { }
+export class TopicsModule { }

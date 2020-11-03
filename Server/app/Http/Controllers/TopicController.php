@@ -20,10 +20,10 @@ class TopicController extends Controller
 
     public function index()
     {
-        $topicsGropedByAgency = Agency::with('topics')
-            ->get(['id', 'name']);
+        $topics = Topic::with('agency')
+            ->get();
 
-        return response()->json(compact('topicsGropedByAgency'));
+        return response()->json(compact('topics'));
     }
 
     public function store(Request $request)

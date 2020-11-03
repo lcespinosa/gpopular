@@ -36,7 +36,7 @@ export class CpopularsService {
   addCpopular(cpopular: Cpopular): Observable<Cpopular> {
     return this.http.post<Cpopular>(environment.apiUrl + this.url, cpopular, httpOptions)
       .pipe(
-        tap((cpop: Cpopular) => console.log(`added cpopular w/ id=${cpop._id}`))
+        tap((cpop: Cpopular) => console.log(`added cpopular w/ id=${cpop.id}`))
       );
   }
 

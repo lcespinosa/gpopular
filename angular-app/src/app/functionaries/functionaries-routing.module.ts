@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutComponent } from '../shared/layout/layout.component';
-import { CpopularListComponent } from './cpopular-list/cpopular-list.component';
+import { FunctionaryListComponent } from './functionary-list/functionary-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: CpopularListComponent },
+      { path: '', component: FunctionaryListComponent },
     ]
   }
 ];
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CpopularsRoutingModule { }
+export class FunctionariesRoutingModule { }

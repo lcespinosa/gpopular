@@ -19,7 +19,7 @@ class AgencyController extends Controller
 
     public function index()
     {
-        $agencies = Agency::all(['id', 'name']);
+        $agencies = Agency::all(['id', 'name', 'code', 'description', 'phones']);
 
         return response()->json(compact('agencies'));
     }
@@ -39,7 +39,7 @@ class AgencyController extends Controller
         ]);
         $agency->save();
 
-        return response()->json(compact('agency'));
+        return response()->json($agency);
     }
 
     public function update(Request $request, $agency)
@@ -58,7 +58,7 @@ class AgencyController extends Controller
             'phones'            => $request->phones,
         ])->save();
 
-        return response()->json(compact('agency'));
+        return response()->json($agency);
     }
 
     public function show($agency)

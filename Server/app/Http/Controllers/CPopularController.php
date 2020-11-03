@@ -19,7 +19,7 @@ class CPopularController extends Controller
 
     public function index()
     {
-        $cpopulars = CPopular::all(['id', 'name']);
+        $cpopulars = CPopular::all(['id', 'name', 'code']);
 
         return response()->json(compact('cpopulars'));
     }
@@ -37,7 +37,7 @@ class CPopularController extends Controller
         ]);
         $cpopular->save();
 
-        return response()->json(compact('cpopular'));
+        return response()->json($cpopular);
     }
 
     public function update(Request $request, $cpopular)
@@ -54,7 +54,7 @@ class CPopularController extends Controller
             'code'              => $request->code,
         ])->save();
 
-        return response()->json(compact('cpopular'));
+        return response()->json($cpopular);
     }
 
     public function show($cpopular)

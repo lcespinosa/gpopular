@@ -1,32 +1,35 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CpopularsService} from '../../core/services/api/cpopulars.service';
 import {Cpopular} from '../../core/models/cpopulars';
+import {Entity} from '../../core/models/entity';
 import {NgForm} from '@angular/forms';
+import {EntityService} from '../../core/services/api/entity.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-cpopular-list',
-  templateUrl: './cpopular-list.component.html',
-  styleUrls: ['./cpopular-list.component.css']
+  selector: 'app-entity-list',
+  templateUrl: './entity-list.component.html',
+  styleUrls: ['./entity-list.component.css']
 })
-export class CpopularListComponent implements OnInit {
+export class EntityListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'code', 'actions'];
-  data: Cpopular[] = [];
+  displayedColumns: string[] = ['id', 'name', 'code', 'description', 'phones', 'actions'];
+  data: Entity[] = [];
   loading: boolean;
 
-  @ViewChild('cpopularForm', { static: false })
-    cpopularForm: NgForm;
-  cpopulaData: Cpopular = {
+  @ViewChild('entityForm', { static: false })
+  entityForm: NgForm;
+  entityData: Entity = {
     id:         0,
     name:       '',
     code:       '',
+    description: '',
+    phones:     '',
     created_at: null,
     updated_at: null,
   };
   isEditMode: boolean;
 
-  constructor(private cpopularsApi: CpopularsService) { }
+  constructor(private entityApi: EntityService) { }
 
   ngOnInit() {
     this.isEditMode = false;
@@ -35,9 +38,9 @@ export class CpopularListComponent implements OnInit {
 
   updateList() {
     this.loading = true;
-    this.cpopularsApi.getCpopulars()
+    this.entityApi.getEntities()
       .subscribe((response: any) => {
-        this.data = response.cpopulars;
+        this.data = response.agencies;
         console.log(this.data);
         this.loading = false;
       }, error => {
@@ -46,39 +49,39 @@ export class CpopularListComponent implements OnInit {
       });
   }
 
-  editCpopular(element: any) {
+  editEntity(element: any) {
     this.loading = false;
-    this.cpopulaData = _.cloneDeep(element);
     this.isEditMode = true;
+    this.entityData = _.cloneDeep(element);
   }
 
   cancelEdit() {
     this.isEditMode = false;
-    this.cpopularForm.resetForm();
+    this.entityForm.resetForm();
   }
 
-  deleteCpopular(id: number) {
+  deleteEntity(id: number) {
     this.loading = true;
-    this.cpopularsApi.deleteCpopular(id)
+    this.entityApi.deleteEntity(id)
       .subscribe(result => {
         this.loading = false;
         this.updateList();
       });
   }
 
-  addCpopular() {
+  addEntity() {
     this.loading = true;
-    this.cpopularsApi.addCpopular(this.cpopulaData)
+    this.entityApi.addEntity(this.entityData)
       .subscribe((response) => {
         this.loading = false;
         this.updateList();
-        this.cpopularForm.resetForm();
+        this.entityForm.resetForm();
       });
   }
 
-  updateCpopular() {
+  updateEntity() {
     this.loading = true;
-    this.cpopularsApi.updateCpopular(this.cpopulaData.id, this.cpopulaData)
+    this.entityApi.updateEntity(this.entityData.id, this.entityData)
       .subscribe((response) => {
         this.loading = false;
         this.updateList();
@@ -88,11 +91,11 @@ export class CpopularListComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.cpopularForm.form.valid) {
+    if (this.entityForm.form.valid) {
       if (this.isEditMode) {
-        this.updateCpopular();
+        this.updateEntity();
       } else {
-        this.addCpopular();
+        this.addEntity();
       }
     } else {
       console.log('Enter valid data!');

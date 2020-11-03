@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CpopularEditComponent } from './cpopular-edit.component';
+import { EntityListComponent } from './entity-list.component';
 
-describe('CpopularEditComponent', () => {
-  let component: CpopularEditComponent;
-  let fixture: ComponentFixture<CpopularEditComponent>;
+describe('EntityListComponent', () => {
+  let component: EntityListComponent;
+  let fixture: ComponentFixture<EntityListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CpopularEditComponent ]
+      declarations: [ EntityListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CpopularEditComponent);
+    fixture = TestBed.createComponent(EntityListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

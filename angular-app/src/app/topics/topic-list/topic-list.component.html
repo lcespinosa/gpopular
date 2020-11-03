@@ -1,7 +1,7 @@
 <div class="mat-elevation-z8">
     <mat-card>
-        <mat-card-title>Consejos populares</mat-card-title>
-        <mat-card-subtitle>Listado de consejos populares</mat-card-subtitle>
+        <mat-card-title>Asuntos</mat-card-title>
+        <mat-card-subtitle>Listado de asuntos</mat-card-subtitle>
         <!-- Form to edit/add row -->
 
         <table mat-table [dataSource]="data" class="mat-elevation-z8">
@@ -21,28 +21,50 @@
                 <td mat-cell *matCellDef="let element"> {{element.code}} </td>
             </ng-container>
 
+            <ng-container matColumnDef="has_resources">
+                <th mat-header-cell *matHeaderCellDef> Con recursos </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox [(ngModel)]="element.has_resources" disabled></mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="agency">
+                <th mat-header-cell *matHeaderCellDef> Organismo </th>
+                <td mat-cell *matCellDef="let element"> {{element.agency.name}} </td>
+            </ng-container>
+
             <ng-container matColumnDef="actions" class="pull-right">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element">
-                    <a href="javascript:void(0)" (click)="editCpopular(element)">Modificar</a> |
-                    <a href="javascript:void(0)" (click)="deleteCpopular(element.id)">Eliminar</a>
+                    <a href="javascript:void(0)" (click)="editTopic(element)">Modificar</a> |
+                    <a href="javascript:void(0)" (click)="deleteTopic(element.id)">Eliminar</a>
                 </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                [ngClass]="{'editable-row': cpopulaData.id === row.id}"></tr>
+                [ngClass]="{'editable-row': topicData.id === row.id}"></tr>
         </table>
 
         <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de consejos populares</mat-card-subtitle>
-            <form (submit)="onSubmit()" #cpopularForm="ngForm">
+            <mat-card-subtitle>Gestión de asuntos</mat-card-subtitle>
+            <form (submit)="onSubmit()" #topicForm="ngForm">
 
                 <mat-form-field>
-                    <input matInput placeholder="Consejo popular" name="name" required [(ngModel)]="cpopulaData.name">
+                    <input matInput placeholder="Asunto" name="name" required [(ngModel)]="topicData.name">
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Código" name="code" required [(ngModel)]="cpopulaData.code">
+                    <input matInput placeholder="Código" name="code" required [(ngModel)]="topicData.code">
+                </mat-form-field>
+                <mat-checkbox name="has_resources" [(ngModel)]="topicData.has_resources">¿Tiene recursos?</mat-checkbox>
+                <br>
+                <mat-form-field>
+                    <mat-label>Organismo</mat-label>
+                    <mat-select  [(value)]="topicData.agency_id" required>
+                        <mat-option *ngFor="let entity of entities" [value]="entity.id">
+                            {{entity.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <ng-container *ngIf="isEditMode; else elseTemplate">
