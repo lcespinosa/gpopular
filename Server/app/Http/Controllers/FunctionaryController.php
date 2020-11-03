@@ -20,10 +20,10 @@ class FunctionaryController extends Controller
 
     public function index()
     {
-        $functionariesGropedByAgency = Agency::with('functionaries')
-            ->get(['id', 'name']);
+        $functionaries = Functionary::with('agency')
+            ->get();
 
-        return response()->json(compact('functionariesGropedByAgency'));
+        return response()->json(compact('functionaries'));
     }
 
     public function store(Request $request)
