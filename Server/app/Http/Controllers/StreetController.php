@@ -20,24 +20,23 @@ class StreetController extends Controller
 
     public function index()
     {
-        $streetsGropedByCPopular = CPopular::with('streets')
-            ->get(['id', 'name']);
+        $streets = Street::with(['cpopular', 'first_between_street', 'second_between_street'])
+            ->get();
 
-        return response()->json(compact('streetsGropedByCPopular'));
+        return response()->json(compact('streets'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'cpopular_id' => 'required|integer',
-            'name'      => 'required|string|max:100',
-            'code'      => 'required|string|max:100|unique:streets',
+            'name'      => 'required|string|max:100|unique:streets',
         ]);
 
         $cpopular = CPopular::findOrFail($request->cpopular_id);
         $street = new Street([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(Street::class),
         ]);
         if ($request->has('first_between_id')) {
             $street->first_between_id = $request->first_between_id;
@@ -57,12 +56,10 @@ class StreetController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:100',
-            'code'      => 'required|string|max:100|unique:streets,code,' . $street->id,
         ]);
 
         $street->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ]);
         if ($request->has('first_between_id')) {
             $street->first_between_id = $request->first_between_id;

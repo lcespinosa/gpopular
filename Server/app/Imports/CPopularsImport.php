@@ -20,9 +20,10 @@ class CPopularsImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
+        
         $model = CPopular::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(CPopular::class),
         ]);
         return $model;
     }

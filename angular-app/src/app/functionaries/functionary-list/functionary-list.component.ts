@@ -18,7 +18,7 @@ export class FunctionaryListComponent implements OnInit {
   entities: Entity[] = [];
   loading: boolean;
 
-  @ViewChild('topicForm', { static: false })
+  @ViewChild('functionaryForm', { static: false })
     functionaryForm: NgForm;
   functionaryData: Functionary = {
     id:         null,

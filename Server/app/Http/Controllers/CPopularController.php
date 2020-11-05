@@ -27,13 +27,12 @@ class CPopularController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:cpopulars',
+            'name'      => 'required|string|max:25|unique:cpopulars',
         ]);
 
         $cpopular = new CPopular([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(CPopular::class),
         ]);
         $cpopular->save();
 
@@ -46,12 +45,10 @@ class CPopularController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:cpopulars,code,' . $cpopular->id,
         ]);
 
         $cpopular->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json($cpopular);

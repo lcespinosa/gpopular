@@ -1,0 +1,106 @@
+<div class="mat-elevation-z8">
+    <mat-card>
+        <mat-card-title>Calles</mat-card-title>
+        <mat-card-subtitle>Listado de calles</mat-card-subtitle>
+        <!-- Form to edit/add row -->
+
+        <table mat-table [dataSource]="data" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> Nº </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cpopular">
+                <th mat-header-cell *matHeaderCellDef> Consejo popular </th>
+                <td mat-cell *matCellDef="let element"> {{element.cpopular.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="between_street">
+                <th mat-header-cell *matHeaderCellDef> Entre </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-template [ngIf]="element.first_between_street">
+                        {{element.first_between_street.name}}
+                        <ng-template [ngIf]="element.second_between_street">
+                            | {{element.second_between_street.name}}
+                        </ng-template>
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions" class="pull-right">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <a href="javascript:void(0)" (click)="editStreet(element)">Modificar</a> |
+                    <a href="javascript:void(0)" (click)="deleteStreet(element.id)">Eliminar</a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                [ngClass]="{'editable-row': streetData.id === row.id}"></tr>
+        </table>
+
+        <mat-card style="margin-top: 15px">
+            <mat-card-subtitle>Gestión de calles</mat-card-subtitle>
+            <form (submit)="onSubmit()" #streetForm="ngForm">
+
+                <mat-form-field>
+                    <input matInput placeholder="Nombre" name="name" required [(ngModel)]="streetData.name">
+                </mat-form-field>
+<!--                <mat-form-field>-->
+<!--                    <mat-label>Consejo popular</mat-label>-->
+                    <!--<mat-select  [(value)]="streetData.cpopular_id" required>
+                        <mat-option *ngFor="let cpopular of cpopulars" [value]="cpopular.id">
+                            {{cpopular.name}}
+                        </mat-option>
+                    </mat-select>-->
+                    <ng-select2
+                        [data]="cpopulars"
+                        [placeholder]="'Consejo popular...'"
+                        [options]="options"
+                        [width]="200">
+                    </ng-select2>
+<!--                </mat-form-field>-->
+                <br>
+                <mat-form-field>
+                    <mat-label>Primera entre calle</mat-label>
+                    <mat-select  [(value)]="streetData.first_between_id">
+                        <mat-option *ngFor="let str of data" [value]="str.id">
+                            {{str.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Segunda entre calle</mat-label>
+                    <mat-select  [(value)]="streetData.second_between_id">
+                        <mat-option *ngFor="let str of data" [value]="str.id">
+                            {{str.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <ng-container *ngIf="isEditMode; else elseTemplate">
+                    <button mat-button color="primary">Modificar</button>
+                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button mat-button color="primary">Agregar</button>
+                </ng-template>
+
+            </form>
+        </mat-card>
+    </mat-card>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+</div>

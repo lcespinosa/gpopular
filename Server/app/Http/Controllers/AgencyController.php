@@ -27,13 +27,12 @@ class AgencyController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:25|unique:agencies',
+            'name'      => 'required|string|max:50|unique:agencies',
         ]);
 
         $agency = new Agency([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(Agency::class),
             'description'       => $request->description,
             'phones'            => $request->phones,
         ]);
@@ -48,12 +47,10 @@ class AgencyController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:25|unique:agencies,code,' . $agency->id,
         ]);
 
         $agency->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
             'description'       => $request->description,
             'phones'            => $request->phones,
         ])->save();

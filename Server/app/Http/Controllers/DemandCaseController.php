@@ -19,7 +19,7 @@ class DemandCaseController extends Controller
 
     public function index()
     {
-        $demand_cases = DemandCase::all(['id', 'name']);
+        $demand_cases = DemandCase::all(['id', 'name', 'code']);
 
         return response()->json(compact('demand_cases'));
     }
@@ -27,13 +27,12 @@ class DemandCaseController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:demand_cases',
+            'name'      => 'required|string|max:25|unique:demand_cases',
         ]);
 
         $demand_case = new DemandCase([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(DemandCase::class),
         ]);
         $demand_case->save();
 
@@ -46,12 +45,10 @@ class DemandCaseController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:demand_cases,code,' . $demand_case->id,
         ]);
 
         $demand_case->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json(compact('demand_case'));

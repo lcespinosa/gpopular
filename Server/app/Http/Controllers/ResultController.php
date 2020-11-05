@@ -19,7 +19,7 @@ class ResultController extends Controller
 
     public function index()
     {
-        $results = Result::all(['id', 'name']);
+        $results = Result::all(['id', 'name', 'code']);
 
         return response()->json(compact('results'));
     }
@@ -27,13 +27,12 @@ class ResultController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:50|unique:results',
+            'name'      => 'required|string|max:50|unique:results',
         ]);
 
         $result = new Result([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(Result::class),
         ]);
         $result->save();
 
@@ -46,12 +45,10 @@ class ResultController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:50',
-            'code'      => 'required|string|max:50|unique:results,code,' . $result->id,
         ]);
 
         $result->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json(compact('result'));

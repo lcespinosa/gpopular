@@ -20,9 +20,10 @@ class ResultsImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
+        
         $model = Result::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(Result::class),
         ]);
         return $model;
     }

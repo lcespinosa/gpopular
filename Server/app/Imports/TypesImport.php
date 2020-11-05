@@ -20,9 +20,10 @@ class TypesImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
+        
         $model = Type::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(Type::class),
         ]);
         return $model;
     }

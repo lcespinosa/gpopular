@@ -20,9 +20,10 @@ class WaysImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
+        
         $model = Way::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(Way::class),
         ]);
         return $model;
     }

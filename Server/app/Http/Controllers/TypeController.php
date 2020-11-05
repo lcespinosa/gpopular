@@ -27,13 +27,12 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:types',
+            'name'      => 'required|string|max:25|unique:types',
         ]);
 
         $type = new Type([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(Type::class),
         ]);
         $type->save();
 
@@ -46,12 +45,10 @@ class TypeController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:types,code,' . $type->id,
         ]);
 
         $type->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json(compact('type'));

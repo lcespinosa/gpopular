@@ -20,9 +20,10 @@ class CasesImport implements ToModel
     public function model(array $row)
     {
         $str = trim($row[0]);
+        
         $model = DemandCase::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(DemandCase::class),
         ]);
         return $model;
     }

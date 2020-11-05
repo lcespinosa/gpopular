@@ -27,13 +27,12 @@ class ReasonTypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:reason_types',
+            'name'      => 'required|string|max:25|unique:reason_types',
         ]);
 
         $reason_type = new ReasonType([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(ReasonType::class),
         ]);
         $reason_type->save();
 
@@ -46,12 +45,10 @@ class ReasonTypeController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:reason_types,code,' . $reason_type->id,
         ]);
 
         $reason_type->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json(compact('reason_type'));

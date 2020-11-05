@@ -20,9 +20,10 @@ class ReasonTypesImport implements ToModel
     public function model(array $row)
     {
         $str = ucfirst(Str::lower(trim($row[0])));
+        
         $model = ReasonType::firstOrCreate([
             'name'  => $str,
-            'code'  => Str::snake($str),
+            'code'  => next_id(ReasonType::class),
         ]);
         return $model;
     }

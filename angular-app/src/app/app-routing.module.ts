@@ -34,6 +34,26 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'demand_cases',
+        loadChildren: './demand_cases/demand_cases.module#DemandCasesModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'ways',
+        loadChildren: './ways/ways.module#WaysModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'results',
+        loadChildren: './results/results.module#ResultsModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'streets',
+        loadChildren: './streets/streets.module#StreetsModule',
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'customers',
         loadChildren: './customers/customers.module#CustomersModule',
         canActivate: [AuthGuard]

@@ -19,7 +19,7 @@ class WayController extends Controller
 
     public function index()
     {
-        $ways = Way::all(['id', 'name']);
+        $ways = Way::all(['id', 'name', 'code']);
 
         return response()->json(compact('ways'));
     }
@@ -27,13 +27,12 @@ class WayController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:ways',
+            'name'      => 'required|string|max:25|unique:ways',
         ]);
 
         $way = new Way([
             'name'              => $request->name,
-            'code'              => $request->code,
+            'code'              => next_id(Way::class),
         ]);
         $way->save();
 
@@ -46,12 +45,10 @@ class WayController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:25',
-            'code'      => 'required|string|max:25|unique:ways,code,' . $way->id,
         ]);
 
         $way->fill([
             'name'              => $request->name,
-            'code'              => $request->code,
         ])->save();
 
         return response()->json(compact('way'));

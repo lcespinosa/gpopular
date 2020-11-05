@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { LoggerModule } from 'ngx-logger';
+import { NgSelect2Module } from 'ng-select2';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { environment } from '../environments/environment';
       level: environment.logLevel,
       serverLogLevel: environment.serverLogLevel
     }),
+    NgSelect2Module,
   ],
   bootstrap: [AppComponent]
 })

@@ -74,6 +74,12 @@
           </mat-icon>
           <p mat-line> Contactos </p>
         </a>
+        <a mat-list-item [routerLink]="['/streets']" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            map
+          </mat-icon>
+          <p mat-line> Calles </p>
+        </a>
         <a mat-list-item [routerLink]="['/users']" routerLinkActive="active">
           <mat-icon mat-list-icon>
             person_pin_circle
@@ -123,7 +129,7 @@
           <p mat-line> Asuntos </p>
         </a>
 
-        <a mat-list-item [routerLink]="['/cases']" routerLinkActive="active">
+        <a mat-list-item [routerLink]="['/demand_cases']" routerLinkActive="active">
           <mat-icon mat-list-icon>
             apps
           </mat-icon>
@@ -142,13 +148,6 @@
             check
           </mat-icon>
           <p mat-line> Resultados de caso </p>
-        </a>
-
-        <a mat-list-item [routerLink]="['/streets']" routerLinkActive="active">
-          <mat-icon mat-list-icon>
-            map
-          </mat-icon>
-          <p mat-line> Calles </p>
         </a>
 
         <!--<a mat-list-item [routerLink]="['/icons']" routerLinkActive="active">
