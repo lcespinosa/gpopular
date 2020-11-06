@@ -83,14 +83,14 @@
                 <mat-form-field>
                     <input matInput placeholder="Ocupación" name="occupation" [(ngModel)]="functionaryData.occupation">
                 </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Organismo</mat-label>
-                    <mat-select  [(value)]="functionaryData.agency_id" required>
-                        <mat-option *ngFor="let entity of entities" [value]="entity.id">
-                            {{entity.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <ng-select2
+                        [data]="entities"
+                        (valueChanged)="changedEntity($event)"
+                        [value]="functionaryData.agency_id"
+                        [placeholder]="'Seleccione organización...'"
+                        [options]="options"
+                        [width]="200">
+                </ng-select2>
 
                 <ng-container *ngIf="isEditMode; else elseTemplate">
                     <button mat-button color="primary">Modificar</button>

@@ -29,11 +29,22 @@ class FunctionaryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'agency_id' => 'required|integer',
+            'agency_id' => 'required',
             'name'      => 'required|string|max:30',
         ]);
 
-        $agency = Agency::findOrFail($request->agency_id);
+        if (filter_var($request->agency_id, FILTER_VALIDATE_INT) !== false) {
+            $agency = Agency::findOrFail($request->agency_id);
+        }
+        else {
+            $agency = Agency::whereName($request->agency_id)->first();
+            if (!$agency) {
+                $agency = Agency::create([
+                    'name'  => $request->agency_id,
+                    'code'  => next_id(Agency::class)
+                ]);
+            }
+        }
         $functionary = new Functionary([
             'name'          => $request->name,
             'last_name'     => $request->last_name,
@@ -52,9 +63,22 @@ class FunctionaryController extends Controller
         $functionary = Functionary::findOrFail($functionary);
 
         $this->validate($request, [
+            'agency_id' => 'required',
             'name'      => 'required|string|max:30',
-            'is_relevant' => 'required',
         ]);
+
+        if (filter_var($request->agency_id, FILTER_VALIDATE_INT) !== false) {
+            $agency = Agency::findOrFail($request->agency_id);
+        }
+        else {
+            $agency = Agency::whereName($request->agency_id)->first();
+            if (!$agency) {
+                $agency = Agency::create([
+                    'name'  => $request->agency_id,
+                    'code'  => next_id(Agency::class)
+                ]);
+            }
+        }
 
         $functionary->fill([
             'name'          => $request->name,
@@ -63,7 +87,8 @@ class FunctionaryController extends Controller
             'phones'        => $request->phones,
             'is_relevant'   => $request->is_relevant ?? false,
             'occupation'    => $request->occupation,
-        ])->save();
+        ]);
+        $agency->functionaries()->save($functionary);
 
         return response()->json(compact('functionary'));
     }

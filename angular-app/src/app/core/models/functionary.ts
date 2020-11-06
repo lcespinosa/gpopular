@@ -9,7 +9,7 @@ export class Functionary {
     is_relevant: boolean;
     occupation: string;
     agency:     Entity;
-    agency_id:  number;
+    agency_id:  any;
     created_at: Date;
     updated_at: Date;
 }

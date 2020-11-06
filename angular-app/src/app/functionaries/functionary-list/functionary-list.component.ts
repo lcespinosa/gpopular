@@ -5,6 +5,7 @@ import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
 import {Entity} from '../../core/models/entity';
 import {EntityService} from '../../core/services/api/entity.service';
+import { Select2OptionData } from 'ng-select2';
 
 @Component({
   selector: 'app-functionary-list',
@@ -15,7 +16,7 @@ export class FunctionaryListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'last_name', 'nick', 'phones', 'occupation', 'is_relevant', 'agency', 'actions'];
   data: Functionary[] = [];
-  entities: Entity[] = [];
+  entities: Array<Select2OptionData>;
   loading: boolean;
 
   @ViewChild('functionaryForm', { static: false })
@@ -34,6 +35,11 @@ export class FunctionaryListComponent implements OnInit {
     updated_at: null,
   };
   isEditMode: boolean;
+  options = {
+    theme: 'mat',
+    allowClear: true,
+    tags: true
+  };
 
   constructor(private functionariesApi: FunctionaryService, private entityApi: EntityService) { }
 
@@ -43,7 +49,12 @@ export class FunctionaryListComponent implements OnInit {
     this.loading = true;
     this.entityApi.getEntities()
       .subscribe((response: any) => {
-        this.entities = response.agencies;
+        this.entities = response.agencies.map((element) => {
+          return {
+            id: element.id,
+            text: element.name
+          };
+        });
         console.log(this.entities);
         this.loading = false;
       }, error => {
@@ -76,6 +87,19 @@ export class FunctionaryListComponent implements OnInit {
   cancelEdit() {
     this.isEditMode = false;
     this.functionaryForm.resetForm();
+    this.functionaryData = {
+      id:         null,
+      name:       '',
+      last_name:  '',
+      nick:       '',
+      phones:     '',
+      is_relevant: false,
+      occupation: '',
+      agency:     null,
+      agency_id:  null,
+      created_at: null,
+      updated_at: null,
+    };
   }
 
   deleteFunctionary(id: number) {
@@ -117,6 +141,12 @@ export class FunctionaryListComponent implements OnInit {
       }
     } else {
       console.log('Enter valid data!');
+    }
+  }
+
+  changedEntity(e: any): void {
+    if (e && e.length > 0) {
+      this.functionaryData.agency_id = e;
     }
   }
 }

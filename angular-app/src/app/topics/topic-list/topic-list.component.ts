@@ -5,6 +5,7 @@ import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
 import {Entity} from '../../core/models/entity';
 import {EntityService} from '../../core/services/api/entity.service';
+import {Select2OptionData} from 'ng-select2';
 
 @Component({
   selector: 'app-topic-list',
@@ -15,7 +16,7 @@ export class TopicListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'has_resources', 'agency', 'actions'];
   data: Topic[] = [];
-  entities: Entity[] = [];
+  entities: Array<Select2OptionData>;
   loading: boolean;
 
   @ViewChild('topicForm', { static: false })
@@ -31,6 +32,11 @@ export class TopicListComponent implements OnInit {
     updated_at: null,
   };
   isEditMode: boolean;
+  options = {
+    theme: 'mat',
+    allowClear: true,
+    tags: true
+  };
 
   constructor(private topicsApi: TopicService, private entityApi: EntityService) { }
 
@@ -40,7 +46,12 @@ export class TopicListComponent implements OnInit {
     this.loading = true;
     this.entityApi.getEntities()
       .subscribe((response: any) => {
-        this.entities = response.agencies;
+        this.entities = response.agencies.map((element) => {
+          return {
+            id: element.id,
+            text: element.name
+          };
+        });
         console.log(this.entities);
         this.loading = false;
       }, error => {
@@ -73,6 +84,16 @@ export class TopicListComponent implements OnInit {
   cancelEdit() {
     this.isEditMode = false;
     this.topicForm.resetForm();
+    this.topicData = {
+      id:         0,
+      name:       '',
+      code:       '',
+      has_resources: false,
+      agency:     null,
+      agency_id:  null,
+      created_at: null,
+      updated_at: null,
+    };
   }
 
   deleteTopic(id: number) {
@@ -114,6 +135,12 @@ export class TopicListComponent implements OnInit {
       }
     } else {
       console.log('Enter valid data!');
+    }
+  }
+
+  changedEntity(e: any): void {
+    if (e && e.length > 0) {
+      this.topicData.agency_id = e;
     }
   }
 }
