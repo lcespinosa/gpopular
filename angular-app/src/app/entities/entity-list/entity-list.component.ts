@@ -4,6 +4,7 @@ import {Entity} from '../../core/models/entity';
 import {NgForm} from '@angular/forms';
 import {EntityService} from '../../core/services/api/entity.service';
 import * as _ from 'lodash';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-entity-list',
@@ -13,11 +14,14 @@ import * as _ from 'lodash';
 export class EntityListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'description', 'phones', 'actions'];
-  data: Entity[] = [];
+  data: MatTableDataSource<Entity>;
   loading: boolean;
 
   @ViewChild('entityForm', { static: false })
   entityForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   entityData: Entity = {
     id:         0,
     name:       '',
@@ -40,7 +44,8 @@ export class EntityListComponent implements OnInit {
     this.loading = true;
     this.entityApi.getEntities()
       .subscribe((response: any) => {
-        this.data = response.agencies;
+        this.data = new MatTableDataSource<Entity>(response.agencies);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
     <mat-card>
         <mat-card-title>Calles</mat-card-title>
         <mat-card-subtitle>Listado de calles</mat-card-subtitle>
@@ -51,56 +51,52 @@
                 [ngClass]="{'editable-row': streetData.id === row.id}"></tr>
         </table>
 
-        <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de calles</mat-card-subtitle>
-            <form (submit)="onSubmit()" #streetForm="ngForm">
-
-                <mat-form-field>
-                    <input matInput placeholder="Nombre" name="name" required [(ngModel)]="streetData.name">
-                </mat-form-field>
-<!--                <mat-form-field>-->
-<!--                    <mat-label>Consejo popular</mat-label>-->
-                    <!--<mat-select  [(value)]="streetData.cpopular_id" required>
-                        <mat-option *ngFor="let cpopular of cpopulars" [value]="cpopular.id">
-                            {{cpopular.name}}
-                        </mat-option>
-                    </mat-select>-->
-                    <ng-select2
-                        [data]="cpopulars"
-                        [placeholder]="'Consejo popular...'"
-                        [options]="options"
-                        [width]="200">
-                    </ng-select2>
-<!--                </mat-form-field>-->
-                <br>
-                <mat-form-field>
-                    <mat-label>Primera entre calle</mat-label>
-                    <mat-select  [(value)]="streetData.first_between_id">
-                        <mat-option *ngFor="let str of data" [value]="str.id">
-                            {{str.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Segunda entre calle</mat-label>
-                    <mat-select  [(value)]="streetData.second_between_id">
-                        <mat-option *ngFor="let str of data" [value]="str.id">
-                            {{str.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <ng-container *ngIf="isEditMode; else elseTemplate">
-                    <button mat-button color="primary">Modificar</button>
-                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <button mat-button color="primary">Agregar</button>
-                </ng-template>
-
-            </form>
-        </mat-card>
+        <mat-paginator [pageSize]="10">
+        </mat-paginator>
     </mat-card>
 
+    <mat-card style="margin-top: 15px">
+        <mat-card-subtitle>Gestión de calles</mat-card-subtitle>
+        <form (submit)="onSubmit()" #streetForm="ngForm">
+
+            <mat-form-field>
+                <input matInput placeholder="Nombre" name="name" required [(ngModel)]="streetData.name">
+            </mat-form-field>
+                <ng-select2
+                    [data]="cpopulars"
+                    (valueChanged)="changedCpopular($event)"
+                    [value]="streetData.cpopular_id"
+                    [placeholder]="'Seleccione Consejo popular...'"
+                    [options]="options"
+                    [width]="220">
+                </ng-select2>
+            <br>
+            <ng-select2
+                    [data]="dataArray"
+                    (valueChanged)="changedFirstStrret($event)"
+                    [value]="streetData.first_between_id"
+                    [placeholder]="'Seleccione Primera calle...'"
+                    [options]="options"
+                    [width]="200">
+            </ng-select2>
+            <ng-select2
+                    [data]="dataArray"
+                    (valueChanged)="changedSecondStreet($event)"
+                    [value]="streetData.second_between_id"
+                    [placeholder]="'Seleccione Segunda calle...'"
+                    [options]="options"
+                    [width]="200">
+            </ng-select2>
+
+            <ng-container *ngIf="isEditMode; else elseTemplate">
+                <button mat-button color="primary">Modificar</button>
+                <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <button mat-button color="primary">Agregar</button>
+            </ng-template>
+
+        </form>
+    </mat-card>
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>

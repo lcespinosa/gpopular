@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
     <mat-card>
         <mat-card-title>Funcionarios</mat-card-title>
         <mat-card-subtitle>Listado de funcionarios</mat-card-subtitle>
@@ -61,48 +61,50 @@
                 [ngClass]="{'editable-row': functionaryData.id === row.id}"></tr>
         </table>
 
-        <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de asuntos</mat-card-subtitle>
-            <form (submit)="onSubmit()" #functionaryForm="ngForm">
-
-                <mat-form-field>
-                    <input matInput placeholder="Nombre" name="name" required [(ngModel)]="functionaryData.name">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput placeholder="Apellidos" name="last_name" [(ngModel)]="functionaryData.last_name">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput placeholder="Alias" name="nick" [(ngModel)]="functionaryData.nick">
-                </mat-form-field>
-                <br>
-                <mat-form-field>
-                    <input matInput placeholder="Teléfonos" name="phones" [(ngModel)]="functionaryData.phones">
-                </mat-form-field>
-                <mat-checkbox name="is_relevant" [(ngModel)]="functionaryData.is_relevant">¿Es cuadro?</mat-checkbox>
-                <br>
-                <mat-form-field>
-                    <input matInput placeholder="Ocupación" name="occupation" [(ngModel)]="functionaryData.occupation">
-                </mat-form-field>
-                <ng-select2
-                        [data]="entities"
-                        (valueChanged)="changedEntity($event)"
-                        [value]="functionaryData.agency_id"
-                        [placeholder]="'Seleccione organización...'"
-                        [options]="options"
-                        [width]="200">
-                </ng-select2>
-
-                <ng-container *ngIf="isEditMode; else elseTemplate">
-                    <button mat-button color="primary">Modificar</button>
-                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <button mat-button color="primary">Agregar</button>
-                </ng-template>
-
-            </form>
-        </mat-card>
+        <mat-paginator [pageSize]="10">
+        </mat-paginator>
     </mat-card>
 
+    <mat-card style="margin-top: 15px">
+        <mat-card-subtitle>Gestión de asuntos</mat-card-subtitle>
+        <form (submit)="onSubmit()" #functionaryForm="ngForm">
+
+            <mat-form-field>
+                <input matInput placeholder="Nombre" name="name" required [(ngModel)]="functionaryData.name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Apellidos" name="last_name" [(ngModel)]="functionaryData.last_name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Alias" name="nick" [(ngModel)]="functionaryData.nick">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Teléfonos" name="phones" [(ngModel)]="functionaryData.phones">
+            </mat-form-field>
+            <mat-checkbox name="is_relevant" [(ngModel)]="functionaryData.is_relevant">¿Es cuadro?</mat-checkbox>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Ocupación" name="occupation" [(ngModel)]="functionaryData.occupation">
+            </mat-form-field>
+            <ng-select2
+                    [data]="entities"
+                    (valueChanged)="changedEntity($event)"
+                    [value]="functionaryData.agency_id"
+                    [placeholder]="'Seleccione organización...'"
+                    [options]="options"
+                    [width]="200">
+            </ng-select2>
+
+            <ng-container *ngIf="isEditMode; else elseTemplate">
+                <button mat-button color="primary">Modificar</button>
+                <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <button mat-button color="primary">Agregar</button>
+            </ng-template>
+
+        </form>
+    </mat-card>
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>

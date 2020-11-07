@@ -3,9 +3,9 @@ import {StreetService} from '../../core/services/api/street.service';
 import {Street} from '../../core/models/street';
 import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
-import {Cpopular} from '../../core/models/cpopulars';
 import {CpopularsService} from '../../core/services/api/cpopulars.service';
 import { Select2OptionData } from 'ng-select2';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-street-list',
@@ -15,12 +15,17 @@ import { Select2OptionData } from 'ng-select2';
 export class StreetListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'cpopular', 'between_street', 'actions'];
-  data: Street[] = [];
+  data: MatTableDataSource<Street>;
+  dataArray: Array<Select2OptionData>;
   cpopulars: Array<Select2OptionData>;
   loading: boolean;
 
   @ViewChild('streetForm', { static: false })
   streetForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
   streetData: Street = {
     id:         null,
     name:       '',
@@ -70,7 +75,14 @@ export class StreetListComponent implements OnInit {
     this.loading = true;
     this.streetApi.getStreets()
       .subscribe((response: any) => {
-        this.data = response.streets;
+        this.data = new MatTableDataSource<Street>(response.streets);
+        this.data.paginator = this.paginator;
+        this.dataArray = response.streets.map((element) => {
+          return {
+            id: element.id,
+            text: element.name
+          };
+        });
         console.log(this.data);
         this.loading = false;
       }, error => {
@@ -108,6 +120,7 @@ export class StreetListComponent implements OnInit {
     this.streetApi.deleteStreet(id)
       .subscribe(result => {
         this.loading = false;
+        this.cancelEdit();
         this.updateList();
       });
   }
@@ -117,9 +130,8 @@ export class StreetListComponent implements OnInit {
     this.streetApi.addStreet(this.streetData)
       .subscribe((response) => {
         this.loading = false;
-        this.updateList();
-
         this.cancelEdit();
+        this.updateList();
       });
   }
 
@@ -146,4 +158,37 @@ export class StreetListComponent implements OnInit {
     }
   }
 
+  changedCpopular(e: any) {
+    if (e && e.length > 0) {
+      this.streetData.cpopular_id = e;
+      this.loading = true;
+      this.streetApi.getStreets(this.streetData.cpopular_id + '')
+        .subscribe((response: any) => {
+          this.dataArray = response.streets.map((element) => {
+            return {
+              id: element.id,
+              text: element.name
+            };
+          });
+          this.streetData.first_between_id = null;
+          this.streetData.second_between_id = null;
+          this.loading = false;
+        }, error => {
+          console.log(error);
+          this.loading = false;
+        });
+    }
+  }
+
+  changedFirstStrret(e: any) {
+    if (e && e.length > 0) {
+      this.streetData.first_between_id = e;
+    }
+  }
+
+  changedSecondStreet(e: any) {
+    if (e && e.length > 0) {
+      this.streetData.second_between_id = e;
+    }
+  }
 }

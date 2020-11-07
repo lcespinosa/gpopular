@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
 import {Result} from '../../core/models/result';
 import {ResultService} from '../../core/services/api/result.service';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-result-list',
@@ -12,11 +13,14 @@ import {ResultService} from '../../core/services/api/result.service';
 export class ResultListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'actions'];
-  data: Result[] = [];
+  data: MatTableDataSource<Result>;
   loading: boolean;
 
   @ViewChild('resultForm', { static: false })
   resultForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   resultData: Result = {
     id:         0,
     name:       '',
@@ -37,7 +41,8 @@ export class ResultListComponent implements OnInit {
     this.loading = true;
     this.resultApi.getResults()
       .subscribe((response: any) => {
-        this.data = response.results;
+        this.data = new MatTableDataSource<Result>(response.results);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

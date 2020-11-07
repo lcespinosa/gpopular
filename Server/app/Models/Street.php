@@ -12,6 +12,7 @@ class Street extends Model
 
         'first_between_id',
         'second_between_id',
+        'cpopular_id',
     ];
 
     public function cpopular(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
     <mat-card>
         <mat-card-title>Asuntos</mat-card-title>
         <mat-card-subtitle>Listado de asuntos</mat-card-subtitle>
@@ -46,46 +46,40 @@
                 [ngClass]="{'editable-row': topicData.id === row.id}"></tr>
         </table>
 
-        <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de asuntos</mat-card-subtitle>
-            <form (submit)="onSubmit()" #topicForm="ngForm">
-
-                <mat-form-field>
-                    <input matInput placeholder="Asunto" name="name" required [(ngModel)]="topicData.name">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput placeholder="Código" name="code" required [(ngModel)]="topicData.code">
-                </mat-form-field>
-                <mat-checkbox name="has_resources" [(ngModel)]="topicData.has_resources">¿Tiene recursos?</mat-checkbox>
-                <br>
-                <!--<mat-form-field>
-                    <mat-label>Organismo</mat-label>
-                    <mat-select  [(value)]="topicData.agency_id" required>
-                        <mat-option *ngFor="let entity of entities" [value]="entity.id">
-                            {{entity.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>-->
-                <ng-select2
-                        [data]="entities"
-                        (valueChanged)="changedEntity($event)"
-                        [value]="topicData.agency_id"
-                        [placeholder]="'Seleccione organización...'"
-                        [options]="options"
-                        [width]="200">
-                </ng-select2>
-
-                <ng-container *ngIf="isEditMode; else elseTemplate">
-                    <button mat-button color="primary">Modificar</button>
-                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <button mat-button color="primary">Agregar</button>
-                </ng-template>
-
-            </form>
-        </mat-card>
+        <mat-paginator [pageSize]="10">
+        </mat-paginator>
     </mat-card>
 
+    <mat-card style="margin-top: 15px">
+        <mat-card-subtitle>Gestión de asuntos</mat-card-subtitle>
+        <form (submit)="onSubmit()" #topicForm="ngForm">
+
+            <mat-form-field>
+                <input matInput placeholder="Asunto" name="name" required [(ngModel)]="topicData.name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Código" name="code" required [(ngModel)]="topicData.code">
+            </mat-form-field>
+            <mat-checkbox name="has_resources" [(ngModel)]="topicData.has_resources">¿Tiene recursos?</mat-checkbox>
+            <br>
+            <ng-select2
+                    [data]="entities"
+                    (valueChanged)="changedEntity($event)"
+                    [value]="topicData.agency_id"
+                    [placeholder]="'Seleccione organización...'"
+                    [options]="options"
+                    [width]="200">
+            </ng-select2>
+
+            <ng-container *ngIf="isEditMode; else elseTemplate">
+                <button mat-button color="primary">Modificar</button>
+                <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <button mat-button color="primary">Agregar</button>
+            </ng-template>
+
+        </form>
+    </mat-card>
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>

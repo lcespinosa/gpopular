@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
     <mat-card>
         <mat-card-title>Organismos</mat-card-title>
         <mat-card-subtitle>Listado de organismos</mat-card-subtitle>
@@ -44,31 +44,33 @@
                 [ngClass]="{'editable-row': entityData.id === row.id}"></tr>
         </table>
 
-        <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de organismos</mat-card-subtitle>
-            <form (submit)="onSubmit()" #entityForm="ngForm">
-
-                <mat-form-field>
-                    <input matInput placeholder="Organismo" name="name" required [(ngModel)]="entityData.name">
-                </mat-form-field>
-                <mat-form-field>
-                    <textarea matInput placeholder="Descripción" name="description" [(ngModel)]="entityData.description"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput placeholder="Teléfonos" name="phones" [(ngModel)]="entityData.phones">
-                </mat-form-field>
-
-                <ng-container *ngIf="isEditMode; else elseTemplate">
-                    <button mat-button color="primary">Modificar</button>
-                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <button mat-button color="primary">Agregar</button>
-                </ng-template>
-
-            </form>
-        </mat-card>
+        <mat-paginator [pageSize]="10">
+        </mat-paginator>
     </mat-card>
 
+    <mat-card style="margin-top: 15px">
+        <mat-card-subtitle>Gestión de organismos</mat-card-subtitle>
+        <form (submit)="onSubmit()" #entityForm="ngForm">
+
+            <mat-form-field>
+                <input matInput placeholder="Organismo" name="name" required [(ngModel)]="entityData.name">
+            </mat-form-field>
+            <mat-form-field>
+                <textarea matInput placeholder="Descripción" name="description" [(ngModel)]="entityData.description"></textarea>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Teléfonos" name="phones" [(ngModel)]="entityData.phones">
+            </mat-form-field>
+
+            <ng-container *ngIf="isEditMode; else elseTemplate">
+                <button mat-button color="primary">Modificar</button>
+                <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <button mat-button color="primary">Agregar</button>
+            </ng-template>
+
+        </form>
+    </mat-card>
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>

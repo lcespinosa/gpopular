@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import {Entity} from '../../core/models/entity';
 import {EntityService} from '../../core/services/api/entity.service';
 import {Select2OptionData} from 'ng-select2';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-topic-list',
@@ -15,12 +16,15 @@ import {Select2OptionData} from 'ng-select2';
 export class TopicListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'has_resources', 'agency', 'actions'];
-  data: Topic[] = [];
+  data: MatTableDataSource<Topic>;
   entities: Array<Select2OptionData>;
   loading: boolean;
 
   @ViewChild('topicForm', { static: false })
     topicForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   topicData: Topic = {
     id:         0,
     name:       '',
@@ -66,7 +70,8 @@ export class TopicListComponent implements OnInit {
     this.loading = true;
     this.topicsApi.getTopics()
       .subscribe((response: any) => {
-        this.data = response.topics;
+        this.data = new MatTableDataSource<Topic>(response.topics);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

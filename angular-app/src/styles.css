@@ -199,3 +199,11 @@ table {
 .mat-flat-button {
   margin: 5px;
 }
+
+mat-card {
+  margin: 10px 10px;
+}
+
+mat-paginator {
+  margin-bottom: 50px;
+}

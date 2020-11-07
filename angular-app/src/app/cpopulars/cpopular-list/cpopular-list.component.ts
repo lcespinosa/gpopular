@@ -3,6 +3,7 @@ import {CpopularsService} from '../../core/services/api/cpopulars.service';
 import {Cpopular} from '../../core/models/cpopulars';
 import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-cpopular-list',
@@ -12,11 +13,15 @@ import * as _ from 'lodash';
 export class CpopularListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'actions'];
-  data: Cpopular[] = [];
+  data: MatTableDataSource<Cpopular>;
   loading: boolean;
 
   @ViewChild('cpopularForm', { static: false })
     cpopularForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
   cpopulaData: Cpopular = {
     id:         0,
     name:       '',
@@ -37,7 +42,8 @@ export class CpopularListComponent implements OnInit {
     this.loading = true;
     this.cpopularsApi.getCpopulars()
       .subscribe((response: any) => {
-        this.data = response.cpopulars;
+        this.data = new MatTableDataSource<Cpopular>(response.cpopulars);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

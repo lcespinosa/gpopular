@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Street } from '../../models/street';
 import {environment} from '../../../../environments/environment';
@@ -19,8 +19,10 @@ export class StreetService {
 
   constructor(private http: HttpClient) { }
 
-  getStreets(): Observable<Street[]> {
-    return this.http.get<Street[]>(environment.apiUrl + this.url)
+  getStreets(cpopular_id: string = ''): Observable<Street[]> {
+    const params = new HttpParams()
+      .set('cpopular_id', cpopular_id);
+    return this.http.get<Street[]>(environment.apiUrl + this.url, { params })
       .pipe(
         tap(street => console.log('fetched calles')),
       );

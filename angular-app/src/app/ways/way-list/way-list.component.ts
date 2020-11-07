@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
 import {Way} from '../../core/models/way';
 import {WayService} from '../../core/services/api/way.service';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-way-list',
@@ -12,11 +13,14 @@ import {WayService} from '../../core/services/api/way.service';
 export class WayListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'actions'];
-  data: Way[] = [];
+  data: MatTableDataSource<Way>;
   loading: boolean;
 
   @ViewChild('wayForm', { static: false })
   wayForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   wayData: Way = {
     id:         0,
     name:       '',
@@ -37,7 +41,8 @@ export class WayListComponent implements OnInit {
     this.loading = true;
     this.wayApi.getWays()
       .subscribe((response: any) => {
-        this.data = response.ways;
+        this.data = new MatTableDataSource<Way>(response.ways);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

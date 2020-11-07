@@ -9,6 +9,8 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { LoggerModule } from 'ngx-logger';
 import { NgSelect2Module } from 'ng-select2';
+import { MatPaginatorIntl } from '@angular/material';
+import { getEsPaginatorIntl } from './core/locale/es-paginator-intl';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -29,6 +31,9 @@ import { environment } from '../environments/environment';
     }),
     NgSelect2Module,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getEsPaginatorIntl() }
+  ]
 })
 export class AppModule { }

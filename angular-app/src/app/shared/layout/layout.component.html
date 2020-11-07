@@ -29,8 +29,6 @@
 
     </mat-menu>
 
-
-
     <button mat-button [matMenuTriggerFor]="userMenu">
       <mat-icon>person</mat-icon>
       <span fxShow fxHide.xs>
@@ -59,8 +57,6 @@
       [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="sidenav">
 
       <mat-nav-list>
-        <h3 mat-subheader>Gestión</h3>
-
         <a mat-list-item [routerLink]="['/dashboard']" routerLinkActive="active">
           <mat-icon mat-list-icon>
             dashboard
@@ -68,23 +64,15 @@
           <p mat-line> Inicio </p>
         </a>
 
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Gestión</h3>
+
         <a mat-list-item [routerLink]="['/customers']" routerLinkActive="active">
           <mat-icon mat-list-icon>
             streetview
           </mat-icon>
           <p mat-line> Contactos </p>
-        </a>
-        <a mat-list-item [routerLink]="['/streets']" routerLinkActive="active">
-          <mat-icon mat-list-icon>
-            map
-          </mat-icon>
-          <p mat-line> Calles </p>
-        </a>
-        <a mat-list-item [routerLink]="['/users']" routerLinkActive="active">
-          <mat-icon mat-list-icon>
-            person_pin_circle
-          </mat-icon>
-          <p mat-line> Direcciones </p>
         </a>
 
         <a mat-list-item [routerLink]="['/account/profile']" routerLinkActive="active">
@@ -97,9 +85,9 @@
           <p mat-line> Respuestas </p>
         </a>
 
-        <mat-divider></mat-divider>
 
-        <h3 mat-subheader>Nomencladores</h3>
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Ubicación</h3>
 
         <a mat-list-item [routerLink]="['/cpopulars']" routerLinkActive="active">
           <mat-icon mat-list-icon>
@@ -107,6 +95,22 @@
           </mat-icon>
           <p mat-line> Consejos populares </p>
         </a>
+        <a mat-list-item [routerLink]="['/streets']" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            map
+          </mat-icon>
+          <p mat-line> Calles </p>
+        </a>
+        <!--<a mat-list-item [routerLink]="['/users']" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            person_pin_circle
+          </mat-icon>
+          <p mat-line> Direcciones </p>
+        </a>-->
+
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Nomencladores</h3>
 
         <a mat-list-item [routerLink]="['/entities']" routerLinkActive="active">
           <mat-icon mat-list-icon>

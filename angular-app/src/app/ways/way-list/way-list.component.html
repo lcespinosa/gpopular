@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
     <mat-card>
         <mat-card-title>Vías de caso</mat-card-title>
         <mat-card-subtitle>Listado de vías de caso</mat-card-subtitle>
@@ -34,23 +34,27 @@
                 [ngClass]="{'editable-row': wayData.id === row.id}"></tr>
         </table>
 
-        <mat-card style="margin-top: 15px">
-            <mat-card-subtitle>Gestión de vías de caso</mat-card-subtitle>
-            <form (submit)="onSubmit()" #wayForm="ngForm">
-
-                <mat-form-field>
-                    <input matInput placeholder="Vía de caso" name="name" required [(ngModel)]="wayData.name">
-                </mat-form-field>
-
-                <ng-container *ngIf="isEditMode; else elseTemplate">
-                    <button mat-button color="primary">Modificar</button>
-                    <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <button mat-button color="primary">Agregar</button>
-                </ng-template>
-
-            </form>
-        </mat-card>
+        <mat-paginator [pageSize]="10">
+        </mat-paginator>
     </mat-card>
+
+    <mat-card style="margin-top: 15px">
+        <mat-card-subtitle>Gestión de vías de caso</mat-card-subtitle>
+        <form (submit)="onSubmit()" #wayForm="ngForm">
+
+            <mat-form-field>
+                <input matInput placeholder="Vía de caso" name="name" required [(ngModel)]="wayData.name">
+            </mat-form-field>
+
+            <ng-container *ngIf="isEditMode; else elseTemplate">
+                <button mat-button color="primary">Modificar</button>
+                <a mat-button color="warn" (click)="cancelEdit()">Cancelar</a>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <button mat-button color="primary">Agregar</button>
+            </ng-template>
+
+        </form>
+    </mat-card>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>

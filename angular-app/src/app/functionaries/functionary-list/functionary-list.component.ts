@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import {Entity} from '../../core/models/entity';
 import {EntityService} from '../../core/services/api/entity.service';
 import { Select2OptionData } from 'ng-select2';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-functionary-list',
@@ -15,12 +16,15 @@ import { Select2OptionData } from 'ng-select2';
 export class FunctionaryListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'last_name', 'nick', 'phones', 'occupation', 'is_relevant', 'agency', 'actions'];
-  data: Functionary[] = [];
+  data: MatTableDataSource<Functionary>;
   entities: Array<Select2OptionData>;
   loading: boolean;
 
   @ViewChild('functionaryForm', { static: false })
     functionaryForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   functionaryData: Functionary = {
     id:         null,
     name:       '',
@@ -69,7 +73,8 @@ export class FunctionaryListComponent implements OnInit {
     this.loading = true;
     this.functionariesApi.getFunctionaries()
       .subscribe((response: any) => {
-        this.data = response.functionaries;
+        this.data = new MatTableDataSource<Functionary>(response.functionaries);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {

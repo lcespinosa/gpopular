@@ -29,12 +29,23 @@ class TopicController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'agency_id' => 'required|integer',
+            'agency_id' => 'required',
             'name'      => 'required|string|max:50',
             'code'      => 'required|string|max:25|unique:topics',
         ]);
 
-        $agency = Agency::findOrFail($request->agency_id);
+        if (filter_var($request->agency_id, FILTER_VALIDATE_INT) !== false) {
+            $agency = Agency::findOrFail($request->agency_id);
+        }
+        else {
+            $agency = Agency::whereName($request->agency_id)->first();
+            if (!$agency) {
+                $agency = Agency::create([
+                    'name'  => $request->agency_id,
+                    'code'  => next_id(Agency::class)
+                ]);
+            }
+        }
         $topic = new Topic([
             'name'              => $request->name,
             'code'              => $request->code,
@@ -54,11 +65,24 @@ class TopicController extends Controller
             'code'      => 'required|string|max:25|unique:topics,code,' . $topic->id,
         ]);
 
+        if (filter_var($request->agency_id, FILTER_VALIDATE_INT) !== false) {
+            $agency = Agency::findOrFail($request->agency_id);
+        }
+        else {
+            $agency = Agency::whereName($request->agency_id)->first();
+            if (!$agency) {
+                $agency = Agency::create([
+                    'name'  => $request->agency_id,
+                    'code'  => next_id(Agency::class)
+                ]);
+            }
+        }
         $topic->fill([
             'name'              => $request->name,
             'code'              => $request->code,
             'has_resources'     => $request->has_resources ?? false,
-        ])->save();
+        ]);
+        $agency->topics()->save($topic);
 
         return response()->json(compact('topic'));
     }

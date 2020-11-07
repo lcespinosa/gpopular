@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import * as _ from 'lodash';
 import {DemandCase} from '../../core/models/demand_case';
 import {DemandCaseService} from '../../core/services/api/demand-case.service';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-demand-case-list',
@@ -12,11 +13,14 @@ import {DemandCaseService} from '../../core/services/api/demand-case.service';
 export class DemandCaseListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'code', 'actions'];
-  data: DemandCase[] = [];
+  data: MatTableDataSource<DemandCase>;
   loading: boolean;
 
   @ViewChild('demandCaseForm', { static: false })
   demandCaseForm: NgForm;
+  // @ts-ignore
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   demandCaseData: DemandCase = {
     id:         0,
     name:       '',
@@ -37,7 +41,8 @@ export class DemandCaseListComponent implements OnInit {
     this.loading = true;
     this.demandCaseApi.getDemandCases()
       .subscribe((response: any) => {
-        this.data = response.demand_cases;
+        this.data = new MatTableDataSource<DemandCase>(response.demand_cases);
+        this.data.paginator = this.paginator;
         console.log(this.data);
         this.loading = false;
       }, error => {
