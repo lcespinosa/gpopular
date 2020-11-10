@@ -1,0 +1,36 @@
+<nz-row class="login-row">
+  <nz-col nzMd="8"></nz-col>
+  <nz-col nzMd="8">
+    <nz-card nzTitle="Panel de Acceso" class="login-card">
+      <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Por favor escriba su nombre de usuario">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userName" placeholder="Usuario" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Por favor escriba su contraseña de acceso">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-row class="login-form-margin">
+          <div nz-col [nzSpan]="12">
+            <label nz-checkbox formControlName="remember">
+              <span>Recordar mi sesión</span>
+            </label>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <a class="login-form-forgot">Olvidé mi contraseña</a>
+          </div>
+        </div>
+        <button nz-button [nzLoading]="loading" (click)="login()" class="login-form-button login-form-margin" [nzType]="'primary'">¡Acceder!</button>
+    <!--    Or <a> register now! </a>-->
+      </form>
+    </nz-card>
+  </nz-col>
+  <nz-col nzMd="8"></nz-col>
+</nz-row>
