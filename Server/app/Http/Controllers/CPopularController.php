@@ -24,6 +24,13 @@ class CPopularController extends Controller
         return response()->json(compact('cpopulars'));
     }
 
+    public function streets($cpopular)
+    {
+        $cpopular = CPopular::findOrFail($cpopular);
+        $streets = $cpopular->streets;
+        return response()->json(compact('streets'));
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [

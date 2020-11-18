@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Contact;
+use App\Models\CPopular;
+use App\Models\Street;
 use App\Scopes\NotAnonymous;
 use Illuminate\Http\Request;
 
@@ -20,7 +23,8 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Contact::all(['id', 'name', 'last_name']);
+        $contacts = Contact::with(['address', 'address.street', 'address.street.cpopular'])
+            ->get();
 
         return response()->json(compact('contacts'));
     }
@@ -29,6 +33,8 @@ class ContactController extends Controller
     {
         $this->validate($request, [
             'name'      => 'required|string|max:50',
+            'street_id' => 'required',
+            'cpopular_id' => 'required',
         ]);
 
         $contact = new Contact([
@@ -39,6 +45,45 @@ class ContactController extends Controller
         ]);
         $contact->save();
 
+        if (filter_var($request->cpopular_id, FILTER_VALIDATE_INT) !== false) {
+            $cpopular = CPopular::findOrFail($request->cpopular_id);
+        }
+        else {
+            $cpopular = CPopular::whereName($request->cpopular_id)->first();
+            if (!$cpopular) {
+                $cpopular = CPopular::create([
+                    'name'  => $request->cpopular_id,
+                    'code'  => next_id(CPopular::class)
+                ]);
+            }
+        }
+        if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
+            $street = Street::findOrFail($request->street_id);
+        }
+        else {
+            $street = Street::whereName($request->street_id)->first();
+            if (!$street) {
+                $street = Street::create([
+                    'name'  => $request->street_id,
+                    'code'  => next_id(Street::class),
+                    'cpopular_id'   => $cpopular->id
+                ]);
+            }
+        }
+
+        if (isset($street)) {
+            $address = new Address([
+                'building'  => $request->address['building'],
+                'apartment' => $request->address['apartment'],
+                'number'    => $request->address['number'],
+
+                'active'    => true,
+
+                'street_id' => $street->id
+            ]);
+            $contact->address()->save($address);
+        }
+
         return response()->json(compact('contact'));
     }
 
@@ -48,6 +93,8 @@ class ContactController extends Controller
 
         $this->validate($request, [
             'name'      => 'required|string|max:50',
+            'street_id' => 'required',
+            'cpopular_id' => 'required',
         ]);
 
         $contact->fill([
@@ -56,6 +103,57 @@ class ContactController extends Controller
             'phones'            => $request->phones,
             'anonymous'         => false,
         ])->save();
+
+        if (filter_var($request->cpopular_id, FILTER_VALIDATE_INT) !== false) {
+            $cpopular = CPopular::findOrFail($request->cpopular_id);
+        }
+        else {
+            $cpopular = CPopular::whereName($request->cpopular_id)->first();
+            if (!$cpopular) {
+                $cpopular = CPopular::create([
+                    'name'  => $request->cpopular_id,
+                    'code'  => next_id(CPopular::class)
+                ]);
+            }
+        }
+        if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
+            $street = Street::findOrFail($request->street_id);
+        }
+        else {
+            $street = Street::whereName($request->street_id)->first();
+            if (!$street) {
+                $street = Street::create([
+                    'name'  => $request->street_id,
+                    'code'  => next_id(Street::class),
+                    'cpopular_id'   => $cpopular->id
+                ]);
+            }
+        }
+
+        if (isset($street)) {
+            $address = $contact->address;
+            if ($address) {
+                $address->fill([
+                    'building'  => $request->address['building'],
+                    'apartment' => $request->address['apartment'],
+                    'number'    => $request->address['number'],
+
+                    'street_id' => $street->id
+                ]);
+            }
+            else {
+                $address = new Address([
+                    'building'  => $request->address['building'],
+                    'apartment' => $request->address['apartment'],
+                    'number'    => $request->address['number'],
+
+                    'active'    => true,
+
+                    'street_id' => $street->id
+                ]);
+            }
+            $contact->address()->save($address);
+        }
 
         return response()->json(compact('contact'));
     }

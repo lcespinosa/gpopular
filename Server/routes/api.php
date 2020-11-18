@@ -108,6 +108,7 @@ $router->group([
     $router->post('/cpopulars', 'CPopularController@store');
     $router->put('/cpopulars/{cpopular}', 'CPopularController@update');
     $router->get('/cpopulars/{cpopular}', 'CPopularController@show');
+    $router->get('/cpopulars/{cpopular}/streets', 'CPopularController@streets');
     $router->delete('/cpopulars/{cpopular}', 'CPopularController@delete');
 
     //STREETS
