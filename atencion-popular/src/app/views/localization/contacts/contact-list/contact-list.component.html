@@ -1,0 +1,197 @@
+<nz-page-header nzTitle="Contactos"
+                nzSubtitle="Aquí podrá gestionar el listado de contactos."
+                nzBackIcon>
+
+  <nz-page-header-extra>
+    <button nz-button (click)="addContact()"><i nz-icon nzType="plus-circle"></i>Nuevo</button>
+    <button nz-button [disabled]="setOfCheckedId.size === 0" nzType="danger"
+            nz-popconfirm nzPopconfirmTitle="¿Está segur@ de borrar estos elementos?"
+            (nzOnConfirm)="deleteSelection()">
+      <i nz-icon nzType="delete"></i>Borrar selección
+    </button>
+  </nz-page-header-extra>
+
+  <nz-page-header-content>
+    <nz-table #basicTable [nzData]="filteredData" [nzLoading]="loading" [nzPageSize]="10"
+              (nzCurrentPageDataChange)="onCurrentPageChanged($event)" nzSize="small">
+      <thead>
+      <tr>
+        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+        <th>Nº</th>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzSortOrder]="column.sortOrder"
+          [nzSortFn]="column.sortFn"
+          [nzSortDirections]="column.sortDirections"
+          [nzCustomFilter]="column.searchable"
+          [nzSortPriority]="column.priority"
+        >
+          {{ column.name }}
+          <nz-filter-trigger [(nzVisible)]="column.searchVisible" [nzActive]="column.searchValue.length > 0"
+                             [nzDropdownMenu]="searchMenu">
+            <i nz-icon nzType="search"></i>
+          </nz-filter-trigger>
+        </th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <td>{{i+1}}</td>
+        <td nzBreakWord>{{data.name}}</td>
+        <td nzBreakWord>{{data.last_name}}</td>
+        <td nzBreakWord>{{data.phones}}</td>
+        <td nzBreakWord>{{data?.address?.street?.name}}</td>
+        <td nzBreakWord>{{data?.address?.street?.cpopular?.name}}</td>
+        <td>
+          <i nz-icon nzType="edit"></i><a (click)="editContact(data)"> Modificar</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <i nz-icon nzType="delete"></i><a nz-popconfirm
+                                            nzPopconfirmTitle="¿Está segur@ de borrar este elemento?"
+                                            (nzOnConfirm)="deleteContact(data.id)"> Borrar</a>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <nz-dropdown-menu #searchMenu="nzDropdownMenu">
+      <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+          <input type="text" nz-input placeholder="Buscar ..." [(ngModel)]="searchValue" (ngModelChange)="onChangeSearch($event)">
+          <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="search()">Buscar</button>
+          <button nz-button nzSize="small" (click)="reset()">Limpiar</button>
+        </div>
+      </div>
+    </nz-dropdown-menu>
+  </nz-page-header-content>
+
+  <nz-drawer [nzClosable]="false" [nzVisible]="drawer" [nzPlacement]="placement"
+             [nzTitle]="drawerTitle" (nzOnClose)="cancelEdit()" [nzWidth]="420">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="onSubmit()">
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Consejo popular</nz-form-label>
+            <nz-form-control>
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddCpopularTemplate"
+                         nzPlaceHolder="Seleccione un consejo" formControlName="cpopular_id" [nzLoading]="loadingCpopulars">
+                <nz-option *ngFor="let item of cpopulars" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+              <ng-template #renderAddCpopularTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #inputCpopularElement>
+                  <a class="add-item" (click)="addCpopularItem(inputCpopularElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-divider nzText="Dirección"></nz-divider>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Calle</nz-form-label>
+            <nz-form-control>
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddStreetTemplate"
+                         nzPlaceHolder="Seleccione una calle" formControlName="street_id" [nzLoading]="loadingStreets">
+                <nz-option *ngFor="let item of streets" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+              <ng-template #renderAddStreetTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #inputStreetElement>
+                  <a class="add-item" (click)="addStreetItem(inputStreetElement)"><i nz-icon nzType="plus"></i> Nueva</a>
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div formGroupName="address">
+        <div nz-row [nzGutter]="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>Edificio</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="building" type="text">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>Apartamento</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="apartment" type="text">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>Número</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="number" type="text">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <nz-divider nzText="Datos personales"></nz-divider>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Nombre</nz-form-label>
+            <nz-form-control nzErrorTip="Por favor escriba el nombre">
+              <input nz-input formControlName="name" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Apellidos</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="last_name" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Teléfonos</nz-form-label>
+            <nz-form-control>
+              <nz-tag *ngFor="let tag of Tags; let i = index" [nzMode]="'closeable'"
+                      (nzOnClose)="handleCloseTag(tag)">
+                {{ sliceTagName(tag) }}
+              </nz-tag>
+              <nz-tag *ngIf="!tagInputVisible" class="editable-tag" nzNoAnimation (click)="showTagInput()">
+                <i nz-icon nzType="plus"></i> Nuevo teléfono </nz-tag>
+              <input #tagInputElement nz-input nzSize="small" *ngIf="tagInputVisible"
+                     formControlName="tmp_phone"
+                     (blur)="handleTagInputConfirm()"
+                     (keydown.enter)="handleTagInputConfirm()"
+                     type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-control [nzOffset]="7">
+              <button nz-button type="reset" (click)="cancelEdit()">Cancelar</button>
+              <button nz-button nzType="primary" type="submit">Guardar</button>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-drawer>
+</nz-page-header>

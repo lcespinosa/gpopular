@@ -1,26 +1,28 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FunctionaryService} from '../../../../core/services/api/functionary.service';
-import {Functionary} from '../../../../core/models/functionary';
-import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
-import * as _ from 'lodash';
-import {EntityService} from '../../../../core/services/api/entity.service';
+import {Contact} from '../../../../core/models/contact';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzDrawerPlacement} from 'ng-zorro-antd/drawer';
 import {SearchableColumnItem} from '../../../../core/interfaces/searchable_column_item';
 import {Title} from '@angular/platform-browser';
+import * as _ from 'lodash';
+import {ContactsService} from '../../../../core/services/api/contacts.service';
 import {environment} from '../../../../../environments/environment';
+import {Street} from '../../../../core/models/street';
+import {CpopularsService} from '../../../../core/services/api/cpopulars.service';
+import {StreetService} from '../../../../core/services/api/street.service';
 
 @Component({
-  selector: 'app-functionary-list',
-  templateUrl: './functionary-list.component.html',
-  styleUrls: ['./functionary-list.component.css']
+  selector: 'app-contact-list',
+  templateUrl: './contact-list.component.html',
+  styleUrls: ['./contact-list.component.less']
 })
-export class FunctionaryListComponent implements OnInit {
+export class ContactListComponent implements OnInit {
 
   @ViewChild('tagInputElement', { static: false }) tagInputElement?: ElementRef;
 
-  data: Functionary[] = [];
-  filteredData: Functionary[] = [];
-  listOfCurrentPageData: Functionary[] = [];
+  data: Contact[] = [];
+  filteredData: Contact[] = [];
+  listOfCurrentPageData: Contact[] = [];
   loading: boolean;
   validateForm!: FormGroup;
   isEditMode: boolean;
@@ -35,35 +37,24 @@ export class FunctionaryListComponent implements OnInit {
     {
       name: 'Nombre',
       sortOrder: null,
-      sortFn: (a: Functionary, b: Functionary) => a.name.localeCompare(b.name),
+      sortFn: (a: Contact, b: Contact) => a.name.localeCompare(b.name),
       sortDirections: ['ascend', 'descend'],
       searchable: true,
       searchVisible: false,
       searchValue: '',
       data: 'name',
-      priority: 3,
+      priority: 1,
     },
     {
       name: 'Apellidos',
       sortOrder: null,
-      sortFn: (a: Functionary, b: Functionary) => a.last_name.localeCompare(b.last_name),
+      sortFn: (a: Contact, b: Contact) => a.last_name.localeCompare(b.last_name),
       sortDirections: ['ascend', 'descend'],
       searchable: true,
       searchVisible: false,
       searchValue: '',
       data: 'last_name',
       priority: 1,
-    },
-    {
-      name: 'Alias',
-      sortOrder: null,
-      sortFn: (a: Functionary, b: Functionary) => a.last_name.localeCompare(b.last_name),
-      sortDirections: ['ascend', 'descend'],
-      searchable: true,
-      searchVisible: false,
-      searchValue: '',
-      data: 'last_name',
-      priority: 2,
     },
     {
       name: 'Teléfonos',
@@ -77,58 +68,52 @@ export class FunctionaryListComponent implements OnInit {
       priority: false,
     },
     {
-      name: 'Ocupación',
+      name: 'Calle',
       sortOrder: null,
-      sortFn: (a: Functionary, b: Functionary) => a.occupation.localeCompare(b.last_name),
+      sortFn: (a: Contact, b: Contact) => a?.address?.street?.name?.localeCompare(b?.address?.street?.name),
       sortDirections: ['ascend', 'descend'],
       searchable: true,
       searchVisible: false,
       searchValue: '',
-      data: 'occupation',
-      priority: 1,
+      data: 'address.street.name',
+      priority: 2,
     },
     {
-      name: 'Cuadro',
+      name: 'Consejo popular',
       sortOrder: null,
-      sortFn: null,
-      sortDirections: [null],
-      searchable: true,
-      searchVisible: false,
-      searchValue: '',
-      data: 'is_relevant',
-      priority: false,
-    },
-    {
-      name: 'Organismo',
-      sortOrder: null,
-      sortFn: (a: Functionary, b: Functionary) => a.agency.name.localeCompare(b.agency.name),
+      sortFn: (a: Contact, b: Contact) => a?.address?.street?.cpopular?.name?.localeCompare(b?.address?.street?.cpopular?.name),
       sortDirections: ['ascend', 'descend'],
       searchable: true,
       searchVisible: false,
       searchValue: '',
-      data: 'agency',
-      priority: 1,
+      data: 'address.street.cpopular.name',
+      priority: 2,
     },
   ];
   searchValue: string;
   searchColumn: SearchableColumnItem;
-  entities = [];
+  cpopulars = [];
+  streets = [];
+  loadingStreets: boolean;
+  loadingCpopulars: boolean;
 
   get Tags(): [] {
     return this.validateForm.get('phones').value || [];
   }
 
-  constructor(private entitiesApi: EntityService,
-              private functionariesApi: FunctionaryService,
+  constructor(private contactsApi: ContactsService,
+              private cpopularsApi: CpopularsService,
+              private streetsApi: StreetService,
               private fb: FormBuilder,
               private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle(`${environment.appName} - Funcionarios`);
+    this.titleService.setTitle(`${environment.appName} - Contactos`);
     this.createForm();
 
     this.cancelEdit();
     this.updateList();
+    this.onChange();
   }
 
   createForm(): void {
@@ -137,47 +122,79 @@ export class FunctionaryListComponent implements OnInit {
       id:           [null, [Validators.nullValidator]],
       name:         [null, [Validators.required]],
       last_name:    [null, [Validators.nullValidator]],
-      nick:         [null, [Validators.nullValidator]],
       phones:       [null, [Validators.nullValidator]],
       tmp_phone:    [null, [Validators.nullValidator]],
-      occupation:   [null, [Validators.nullValidator]],
-      is_relevant:  [null, [Validators.nullValidator]],
-      agency:       [null, [Validators.nullValidator]],
-      agency_id:    [null, [Validators.required]],
+      anonymous:    [null, [Validators.nullValidator]],
       created_at:   [null, [Validators.nullValidator]],
       updated_at:   [null, [Validators.nullValidator]],
+      cpopular_id:  [null, [Validators.required]],
+      street_id:    [null, [Validators.required]],
+      address:      this.fb.group({
+        id:           [null, [Validators.nullValidator]],
+        building:     [null, [Validators.nullValidator]],
+        apartment:    [null, [Validators.nullValidator]],
+        number:       [null, [Validators.nullValidator]],
+        created_at:   [null, [Validators.nullValidator]],
+        updated_at:   [null, [Validators.nullValidator]],
+      })
     });
+  }
 
-    this.loading = true;
+  onChange(): void {
+    this.validateForm.get('cpopular_id').valueChanges.subscribe(value => {
+      if (this.streets.length > 0) {
+        this.validateForm.patchValue({street_id: null}, {emitEvent: false});
+      }
+      this.streets = [];
+      if (isNaN(value)) {
+      } else if (value != null) {
+        this.loadingStreets = true;
+        this.cpopularsApi.getStreets(value)
+          .subscribe((resp: any) => {
+            this.streets = resp.streets.map((element) => {
+              return {
+                id: element.id,
+                text: element.name
+              };
+            });
+            this.loadingStreets = false;
+          }, error => {
+            console.log(error);
+          });
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.isEditMode) {
-      this.updateFunctionary();
+      this.updateContact();
     } else {
-      this.storeFunctionary();
+      this.storeContact();
     }
     this.cancelEdit();
   }
 
   updateList(): void {
     this.loading = true;
-    this.functionariesApi.getFunctionaries()
+    this.loadingStreets = true;
+    this.loadingCpopulars = true;
+    this.contactsApi.getContacts()
       .subscribe((response: any) => {
-        this.data = response.functionaries;
-        this.filteredData = response.functionaries;
-        this.entitiesApi.getEntities()
+        this.data = response.contacts;
+        this.filteredData = response.contacts;
+        this.loading = false;
+        this.cpopularsApi.getCpopulars()
           .subscribe((resp: any) => {
-            this.entities = resp.agencies.map((element) => {
+            this.cpopulars = resp.cpopulars.map((element) => {
               return {
                 id: element.id,
                 text: element.name
               };
             });
-            this.loading = false;
+            this.loadingStreets = false;
+            this.loadingCpopulars = false;
           }, error => {
             console.log(error);
-            this.loading = false;
           });
       }, error => {
         this.loading = false;
@@ -190,19 +207,31 @@ export class FunctionaryListComponent implements OnInit {
     this.validateForm.reset();
   }
 
-  editFunctionary(element: any): void {
-    this.drawerTitle = 'Modificar funcionario';
+  editContact(element: any): void {
+    this.drawerTitle = 'Modificar contacto';
     this.loading = false;
-    const clone = _.cloneDeep(element);
-    clone.tmp_phone = '';
-    this.validateForm.setValue(clone);
+    element = _.cloneDeep(element);
+    element.address = element.address || {
+      id:           null,
+      building:     null,
+      apartment:    null,
+      number:       null,
+      created_at:   null,
+      updated_at:   null,
+    };
+    this.validateForm.patchValue(element);
+    this.validateForm.patchValue({
+      cpopular_id: element?.address?.street?.cpopular?.id,
+      street_id: element?.address?.street?.id,
+    });
+
     this.isEditMode = true;
     this.drawer = true;
   }
 
-  deleteFunctionary(id: number): void {
+  deleteContact(id: number): void {
     this.loading = true;
-    this.functionariesApi.deleteFunctionary(id)
+    this.contactsApi.deleteContact(id)
       .subscribe(result => {
         this.loading = false;
         this.updateList();
@@ -213,25 +242,25 @@ export class FunctionaryListComponent implements OnInit {
 
   }
 
-  addFunctionary(): void {
-    this.drawerTitle = 'Nuevo funcionario';
+  addContact(): void {
+    this.drawerTitle = 'Nuevo contacto';
     this.loading = false;
     this.isEditMode = false;
     this.drawer = true;
   }
 
-  storeFunctionary(): void {
+  storeContact(): void {
     this.loading = true;
-    this.functionariesApi.addFunctionary(this.validateForm.value)
+    this.contactsApi.addContact(this.validateForm.value)
       .subscribe((response) => {
         this.loading = false;
         this.updateList();
       });
   }
 
-  updateFunctionary(): void {
+  updateContact(): void {
     this.loading = true;
-    this.functionariesApi.updateFunctionary(this.validateForm.get('id').value, this.validateForm.value)
+    this.contactsApi.updateContact(this.validateForm.get('id').value, this.validateForm.value)
       .subscribe((response) => {
         this.loading = false;
         this.updateList();
@@ -247,7 +276,7 @@ export class FunctionaryListComponent implements OnInit {
     }
   }
 
-  onCurrentPageChanged(listOfCurrentPageData: Functionary[]): void {
+  onCurrentPageChanged(listOfCurrentPageData: Contact[]): void {
     this.listOfCurrentPageData = listOfCurrentPageData;
     this.refreshCheckedStatus();
   }
@@ -313,21 +342,13 @@ export class FunctionaryListComponent implements OnInit {
     this.searchColumn.searchVisible = false;
     const search = this.searchColumn.searchValue;
     const column = this.searchColumn.data;
-    if (column === 'agency') {
-      this.filteredData = this.data.filter((item: Functionary) => item[column].name.indexOf(search) !== -1);
-    }
-    else if (column === 'is_relevant') {
-      const yes = search.toLowerCase() === 'si';
-      if (search.length > 0) {
-        this.filteredData = this.data.filter((item: Functionary) => item[column] === yes);
+    this.filteredData = this.data.filter((item: Contact) => {
+      const result = _.get(item, column)?.indexOf(search);
+      if (result === undefined && search.length > 0) {
+        return false;
       }
-      else {
-        this.filteredData = this.data;
-      }
-    }
-    else {
-      this.filteredData = this.data.filter((item: Functionary) => item[column].indexOf(search) !== -1);
-    }
+      return result !== -1;
+    });
   }
 
   reset(): void {
@@ -337,11 +358,22 @@ export class FunctionaryListComponent implements OnInit {
     this.search();
   }
 
-  addEntityItem(input: HTMLInputElement): void {
+  addCpopularItem(input: HTMLInputElement): void {
     const value = input.value;
-    const hasEntity = this.entities.some((item: any) => item.text.indexOf(value) !== -1);
+    const hasEntity = this.cpopulars.some((item: any) => item.text.indexOf(value) !== -1);
     if (!hasEntity) {
-      this.entities = [...this.entities, {
+      this.cpopulars = [...this.cpopulars, {
+        id:         value,
+        text:       value,
+      }];
+    }
+  }
+
+  addStreetItem(input: HTMLInputElement): void {
+    const value = input.value;
+    const hasEntity = this.streets.some((item: any) => item.text.indexOf(value) !== -1);
+    if (!hasEntity) {
+      this.streets = [...this.streets, {
         id:         value,
         text:       value,
       }];

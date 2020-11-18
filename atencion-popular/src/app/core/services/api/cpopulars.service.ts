@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { catchError, tap, map } from 'rxjs/operators';
 import { Cpopular } from '../../models/cpopulars';
 import {environment} from '../../../../environments/environment';
+import {Street} from '../../models/street';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -51,6 +52,13 @@ export class CpopularsService {
     return this.http.delete<Cpopular>(environment.apiUrl + this.url + `/${id}`, httpOptions)
       .pipe(
         tap(_ => console.log(`deleted cpopular ${id}`)),
+      );
+  }
+
+  getStreets(id: number): Observable<Street[]> {
+    return this.http.get<Street[]>(environment.apiUrl + this.url + `/${id}/streets`)
+      .pipe(
+        tap(street => console.log('fetched calles de consejos')),
       );
   }
 }
