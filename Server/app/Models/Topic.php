@@ -10,6 +10,8 @@ class Topic extends Model
         'name',
         'code',
         'has_resources',
+
+        'agency_id'
     ];
 
     protected $casts = [
@@ -23,6 +25,6 @@ class Topic extends Model
 
     public function demands()
     {
-        return $this->belongsToMany(Demand::class);
+        return $this->hasMany(Demand::class);
     }
 }

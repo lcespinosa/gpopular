@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutComponent } from '../../../shared/layout/layout.component';
-import { WayListComponent } from './way-list/way-list.component';
+import { TypeListComponent } from './type-list/type-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: WayListComponent },
+      { path: '', component: TypeListComponent },
     ]
   }
 ];
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class WaysRoutingModule { }
+export class TypesRoutingModule { }

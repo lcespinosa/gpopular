@@ -17,6 +17,9 @@
       </li>
       <li nz-submenu nzOpen nzTitle="Gestión">
         <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/demands">Demandas</a>
+          </li>
         </ul>
       </li>
       <li nz-submenu nzOpen nzTitle="Ubicaciones" nzIcon="aim">
@@ -44,10 +47,13 @@
             <a routerLink="/nomenclatures/topics">Asuntos</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/nomenclatures/demand_cases">Tipos de caso</a>
+            <a routerLink="/nomenclatures/types">Tipos de caso</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/nomenclatures/ways">Vías</a>
+            <a routerLink="/nomenclatures/demand_cases">Casos de denuncia</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/nomenclatures/ways">Vías de caso</a>
           </li>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/nomenclatures/results">Tipos de resultado</a>

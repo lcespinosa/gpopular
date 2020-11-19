@@ -59,7 +59,7 @@ export class WayListComponent implements OnInit {
               private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle(`${environment.appName} - Vías`);
+    this.titleService.setTitle(`${environment.appName} - Vías de caso`);
     this.createForm();
 
     this.cancelEdit();
@@ -103,7 +103,7 @@ export class WayListComponent implements OnInit {
   }
 
   editWay(element: any): void {
-    this.drawerTitle = 'Modificar vía';
+    this.drawerTitle = 'Modificar vía de caso';
     this.loading = false;
     this.validateForm.setValue(_.cloneDeep(element));
     this.isEditMode = true;
@@ -124,7 +124,7 @@ export class WayListComponent implements OnInit {
   }
 
   addWay(): void {
-    this.drawerTitle = 'Nueva vía';
+    this.drawerTitle = 'Nueva vía de caso';
     this.loading = false;
     this.isEditMode = false;
     this.drawer = true;

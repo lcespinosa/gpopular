@@ -19,7 +19,7 @@ class TypeController extends Controller
 
     public function index()
     {
-        $types = Type::all(['id', 'name']);
+        $types = Type::all(['id', 'name', 'code']);
 
         return response()->json(compact('types'));
     }

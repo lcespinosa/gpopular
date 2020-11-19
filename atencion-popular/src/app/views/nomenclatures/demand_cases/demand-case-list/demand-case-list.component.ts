@@ -59,7 +59,7 @@ export class DemandCaseListComponent implements OnInit {
               private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle(`${environment.appName} - Tipos de caso`);
+    this.titleService.setTitle(`${environment.appName} - Casos de denuncia`);
     this.createForm();
 
     this.cancelEdit();
@@ -103,7 +103,7 @@ export class DemandCaseListComponent implements OnInit {
   }
 
   editDemandCase(element: any): void {
-    this.drawerTitle = 'Modificar tipo de caso';
+    this.drawerTitle = 'Modificar caso de denuncia';
     this.loading = false;
     this.validateForm.setValue(_.cloneDeep(element));
     this.isEditMode = true;
@@ -124,7 +124,7 @@ export class DemandCaseListComponent implements OnInit {
   }
 
   addDemandCase(): void {
-    this.drawerTitle = 'Nuevo tipo de caso';
+    this.drawerTitle = 'Nuevo caso de denuncia';
     this.loading = false;
     this.isEditMode = false;
     this.drawer = true;

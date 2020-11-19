@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutComponent } from '../../../shared/layout/layout.component';
-import { EntityListComponent } from './entity-list/entity-list.component';
+import { DemandListComponent } from './demand-list/demand-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: EntityListComponent },
+      { path: '', component: DemandListComponent },
     ]
   }
 ];
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EntitiesRoutingModule { }
+export class DemandsRoutingModule { }

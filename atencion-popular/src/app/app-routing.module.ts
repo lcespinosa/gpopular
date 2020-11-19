@@ -24,6 +24,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'management',
+    loadChildren: () => import('./views/management/management.module').then(m => m.ManagementModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: 'dashboard',
     pathMatch: 'full'

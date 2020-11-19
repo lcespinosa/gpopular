@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EntitiesRoutingModule } from './entities-routing.module';
-import { EntityListComponent } from './entity-list/entity-list.component';
+import { DemandsRoutingModule } from './demands-routing.module';
+import { DemandListComponent } from './demand-list/demand-list.component';
 import {SharedModule} from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    EntitiesRoutingModule,
+    DemandsRoutingModule,
     SharedModule
   ],
   declarations: [
-    EntityListComponent
+    DemandListComponent
   ],
   entryComponents: [
   ]
 })
-export class EntitiesModule { }
+export class DemandsModule { }

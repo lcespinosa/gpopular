@@ -1,4 +1,4 @@
-export class Way {
+export class Type {
   id:         number;
   name:       string;
   code:       string;

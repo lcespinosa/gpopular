@@ -183,21 +183,23 @@ export class ContactListComponent implements OnInit {
         this.data = response.contacts;
         this.filteredData = response.contacts;
         this.loading = false;
-        this.cpopularsApi.getCpopulars()
-          .subscribe((resp: any) => {
-            this.cpopulars = resp.cpopulars.map((element) => {
-              return {
-                id: element.id,
-                text: element.name
-              };
-            });
-            this.loadingStreets = false;
-            this.loadingCpopulars = false;
-          }, error => {
-            console.log(error);
-          });
       }, error => {
         this.loading = false;
+      });
+    this.cpopularsApi.getCpopulars()
+      .subscribe((resp: any) => {
+        this.cpopulars = resp.cpopulars.map((element) => {
+          return {
+            id: element.id,
+            text: element.name
+          };
+        });
+        this.loadingStreets = false;
+        this.loadingCpopulars = false;
+      }, error => {
+        this.loadingStreets = false;
+        this.loadingCpopulars = false;
+        console.log(error);
       });
   }
 

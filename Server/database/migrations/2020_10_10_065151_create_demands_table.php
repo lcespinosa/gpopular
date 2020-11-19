@@ -19,8 +19,8 @@ class CreateDemandsTable extends Migration
             $table->string('number');
             $table->string('expedient')->nullable();
             $table->date('reception_date')->nullable();
-            $table->text('content')->nullable();
-            $table->boolean('is_demand')->default(false);
+            $table->text('content');
+            $table->boolean('is_anonymous')->default(false);
 
             $table->foreignId('type_id')->default(1)
                 ->constrained()
@@ -36,6 +36,10 @@ class CreateDemandsTable extends Migration
                 ->nullOnDelete();
 
             $table->foreignId('contact_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('topic_id')
                 ->constrained()
                 ->cascadeOnDelete();
 

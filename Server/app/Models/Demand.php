@@ -12,20 +12,21 @@ class Demand extends Model
         'expedient',
         'reception_date',
         'content',
-        'is_demand',
+        'is_anonymous',
 
         'type_id',
         'way_id',
         'demand_case_id',
+        'topic_id',
     ];
 
     protected $casts = [
         'reception_date'    => 'datetime: d-m-Y',
     ];
 
-    public function topics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function topic(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsToMany(Topic::class);
+        return $this->belongsTo(Topic::class);
     }
 
     public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WaysRoutingModule } from './ways-routing.module';
+import { TypesRoutingModule } from './types-routing.module';
 import { SharedModule } from '../../../shared/shared.module';
-import { WayListComponent } from './way-list/way-list.component';
+import { TypeListComponent } from './type-list/type-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    WaysRoutingModule,
+    TypesRoutingModule,
     SharedModule
   ],
   declarations: [
-    WayListComponent,
+    TypeListComponent,
   ],
   entryComponents: [
   ]
 })
-export class WaysModule { }
+export class TypesModule { }

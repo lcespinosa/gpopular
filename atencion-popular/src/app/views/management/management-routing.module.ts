@@ -6,28 +6,8 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'entities',
-        loadChildren: () => import('./entities/entities.module').then(m => m.EntitiesModule),
-      },
-      {
-        path: 'functionaries',
-        loadChildren: () => import('./functionaries/functionaries.module').then(m => m.FunctionariesModule),
-      },
-      {
-        path: 'topics',
-        loadChildren: () => import('./topics/topics.module').then(m => m.TopicsModule),
-      },
-      {
-        path: 'demand_cases',
-        loadChildren: () => import('./demand_cases/demand_cases.module').then(m => m.DemandCasesModule),
-      },
-      {
-        path: 'ways',
-        loadChildren: () => import('./ways/ways.module').then(m => m.WaysModule),
-      },
-      {
-        path: 'results',
-        loadChildren: () => import('./results/results.module').then(m => m.ResultsModule),
+        path: 'demands',
+        loadChildren: () => import('./demands/demands.module').then(m => m.DemandsModule),
       },
     ]
   }
@@ -37,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class NomenclaturesRoutingModule { }
+export class ManagementRoutingModule { }

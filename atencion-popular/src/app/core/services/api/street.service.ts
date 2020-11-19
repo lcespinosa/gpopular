@@ -55,4 +55,11 @@ export class StreetService {
         tap(_ => console.log(`deleted calle ${id}`)),
       );
   }
+
+  getContacts(id: number): Observable<any> {
+    return this.http.get<any>(environment.apiUrl + this.url + `/${id}/contacts`)
+      .pipe(
+        tap(street => console.log('fetched contactos de la calle')),
+      );
+  }
 }

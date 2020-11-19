@@ -1,1 +1,90 @@
-<p>type-list works!</p>
+<nz-page-header nzTitle="Tipos de caso"
+                nzSubtitle="Aquí podrá gestionar el listado de tipos de caso."
+                nzBackIcon>
+
+  <nz-page-header-extra>
+    <button nz-button (click)="addType()"><i nz-icon nzType="plus-circle"></i>Nuevo</button>
+    <button nz-button [disabled]="setOfCheckedId.size === 0" nzType="danger"
+            nz-popconfirm nzPopconfirmTitle="¿Está segur@ de borrar estos elementos?"
+            (nzOnConfirm)="deleteSelection()">
+      <i nz-icon nzType="delete"></i>Borrar selección
+    </button>
+  </nz-page-header-extra>
+
+  <nz-page-header-content>
+    <nz-table #basicTable [nzData]="filteredData" [nzLoading]="loading" [nzPageSize]="10"
+              (nzCurrentPageDataChange)="onCurrentPageChanged($event)" nzSize="small">
+      <thead>
+      <tr>
+        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+        <th>Nº</th>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzSortOrder]="column.sortOrder"
+          [nzSortFn]="column.sortFn"
+          [nzSortDirections]="column.sortDirections"
+          [nzCustomFilter]="column.searchable"
+          [nzSortPriority]="column.priority"
+        >
+          {{ column.name }}
+          <nz-filter-trigger [(nzVisible)]="column.searchVisible" [nzActive]="column.searchValue.length > 0"
+                             [nzDropdownMenu]="searchMenu">
+            <i nz-icon nzType="search"></i>
+          </nz-filter-trigger>
+        </th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <td>{{i+1}}</td>
+        <td>{{data.name}}</td>
+        <td>{{data.code}}</td>
+        <td>
+          <i nz-icon nzType="edit"></i><a (click)="editType(data)"> Modificar</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <i nz-icon nzType="delete"></i><a nz-popconfirm
+                                            nzPopconfirmTitle="¿Está segur@ de borrar este elemento?"
+                                            (nzOnConfirm)="deleteType(data.id)"> Borrar</a>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <nz-dropdown-menu #searchMenu="nzDropdownMenu">
+      <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+          <input type="text" nz-input placeholder="Buscar ..." [(ngModel)]="searchValue" (ngModelChange)="onChangeSearch($event)">
+          <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="search()">Buscar</button>
+          <button nz-button nzSize="small" (click)="reset()">Limpiar</button>
+        </div>
+      </div>
+    </nz-dropdown-menu>
+  </nz-page-header-content>
+
+  <nz-drawer [nzClosable]="false" [nzVisible]="drawer" [nzPlacement]="placement"
+             [nzTitle]="drawerTitle" (nzOnClose)="cancelEdit()" [nzWidth]="420">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="onSubmit()">
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Nombre</nz-form-label>
+            <nz-form-control nzErrorTip="Por favor escriba el nombre">
+              <input nz-input formControlName="name" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-control [nzOffset]="7">
+              <button nz-button type="reset" (click)="cancelEdit()">Cancelar</button>
+              <button nz-button nzType="primary" type="submit" [disabled]="validateForm.invalid">Guardar</button>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-drawer>
+</nz-page-header>

@@ -195,6 +195,7 @@ export class ResultListComponent implements OnInit {
     const search = this.searchColumn.searchValue;
     const column = this.searchColumn.data;
     this.filteredData = this.data.filter((item: Result) => item[column].indexOf(search) !== -1);
+
   }
 
   reset(): void {
