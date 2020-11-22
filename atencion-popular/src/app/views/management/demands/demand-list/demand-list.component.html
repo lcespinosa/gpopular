@@ -116,7 +116,7 @@
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Contacto</nz-form-label>
+            <nz-form-label nzRequired>Contacto</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch nzAllowClear
                          nzPlaceHolder="Seleccione un contacto" formControlName="contact_id" [nzLoading]="loadingContacts">
@@ -126,76 +126,100 @@
           </nz-form-item>
         </div>
       </div>
-      <!--<nz-divider nzText="Dirección"></nz-divider>
+      <nz-divider nzText="Libro"></nz-divider>
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Calle</nz-form-label>
+            <nz-form-label nzRequired>Página</nz-form-label>
             <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddStreetTemplate"
-                         nzPlaceHolder="Seleccione una calle" formControlName="street_id" [nzLoading]="loadingStreets">
-                <nz-option *ngFor="let item of streets" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              <input nz-input formControlName="page" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Número</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="number" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Expediente</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="expedient" type="text">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-divider nzText="Datos"></nz-divider>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Tipo</nz-form-label>
+            <nz-form-control>
+              <nz-select nzShowSearch nzAllowClear
+                         nzPlaceHolder="Seleccione un tipo de demanda" formControlName="type_id" [nzLoading]="loadingTypes">
+                <nz-option *ngFor="let item of types" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
               </nz-select>
-              <ng-template #renderAddStreetTemplate>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Tipo de denuncia</nz-form-label>
+            <nz-form-control>
+              <nz-select nzShowSearch nzAllowClear
+                         nzPlaceHolder="Seleccione un tipo de denuncia" formControlName="demand_case_id" [nzLoading]="loadingDemandCases">
+                <nz-option *ngFor="let item of demandCases" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Vía</nz-form-label>
+            <nz-form-control>
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddWayTemplate"
+                         nzPlaceHolder="Seleccione una vía" formControlName="way_id" [nzLoading]="loadingWays">
+                <nz-option *ngFor="let item of ways" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+              <ng-template #renderAddWayTemplate>
                 <nz-divider></nz-divider>
                 <div class="container">
-                  <input type="text" nz-input #inputStreetElement>
-                  <a class="add-item" (click)="addStreetItem(inputStreetElement)"><i nz-icon nzType="plus"></i> Nueva</a>
+                  <input type="text" nz-input #wayInputElement>
+                  <a class="add-item" (click)="addWayItem(wayInputElement)"><i nz-icon nzType="plus"></i> Nueva</a>
                 </div>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
-      <div formGroupName="address">
-        <div nz-row [nzGutter]="8">
-          <div nz-col nzSpan="24">
-            <nz-form-item>
-              <nz-form-label>Edificio</nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="building" type="text">
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-row [nzGutter]="8">
-          <div nz-col nzSpan="24">
-            <nz-form-item>
-              <nz-form-label>Apartamento</nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="apartment" type="text">
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-row [nzGutter]="8">
-          <div nz-col nzSpan="24">
-            <nz-form-item>
-              <nz-form-label>Número</nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="number" type="text">
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-      </div>
-      <nz-divider nzText="Datos personales"></nz-divider>
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Nombre</nz-form-label>
-            <nz-form-control nzErrorTip="Por favor escriba el nombre">
-              <input nz-input formControlName="name" type="text">
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label>Apellidos</nz-form-label>
+            <nz-form-label>Organismo</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="last_name" type="text">
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddAgencyTemplate"
+                         nzPlaceHolder="Seleccione un organismo" formControlName="agency_id" [nzLoading]="loadingAgencies">
+                <nz-option *ngFor="let item of agencies" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+              <ng-template #renderAddAgencyTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #agencyInputElement>
+                  <a class="add-item" (click)="addAgencyItem(agencyInputElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                </div>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -203,23 +227,43 @@
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Teléfonos</nz-form-label>
+            <nz-form-label nzRequired>Asunto</nz-form-label>
             <nz-form-control>
-              <nz-tag *ngFor="let tag of Tags; let i = index" [nzMode]="'closeable'"
-                      (nzOnClose)="handleCloseTag(tag)">
-                {{ sliceTagName(tag) }}
-              </nz-tag>
-              <nz-tag *ngIf="!tagInputVisible" class="editable-tag" nzNoAnimation (click)="showTagInput()">
-                <i nz-icon nzType="plus"></i> Nuevo teléfono </nz-tag>
-              <input #tagInputElement nz-input nzSize="small" *ngIf="tagInputVisible"
-                     formControlName="tmp_phone"
-                     (blur)="handleTagInputConfirm()"
-                     (keydown.enter)="handleTagInputConfirm()"
-                     type="text">
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddTopicTemplate"
+                         nzPlaceHolder="Seleccione un asunto" formControlName="topic_id" [nzLoading]="loadingTopics">
+                <nz-option *ngFor="let item of topics" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
+              </nz-select>
+              <ng-template #renderAddTopicTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #topicInputElement>
+                  <a class="add-item" (click)="addTopicItem(topicInputElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                </div>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>-->
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Fecha de recepción</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="reception_date"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Texto</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input rows="2" placeholder="Escriba el texto de la demanda" formControlName="content"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>

@@ -58,6 +58,22 @@ class AgencyController extends Controller
         return response()->json($agency);
     }
 
+    public function topics($agency)
+    {
+        $agency = Agency::findOrFail($agency);
+        $agency->load('topics');
+        $topics = $agency->topics;
+        return response()->json(compact('topics'));
+    }
+
+    public function functionaries($agency)
+    {
+        $agency = Agency::findOrFail($agency);
+        $agency->load('functionaries');
+        $functionaries = $agency->functionaries;
+        return response()->json(compact('functionaries'));
+    }
+
     public function show($agency)
     {
         $agency = Agency::findOrFail($agency);

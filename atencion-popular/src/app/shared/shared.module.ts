@@ -22,6 +22,7 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzEmptyModule} from 'ng-zorro-antd/empty';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSelectModule} from 'ng-zorro-antd/select';
+import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
     NzEmptyModule,
     NzCheckboxModule,
     NzSelectModule,
+    NzDatePickerModule,
   ],
   exports: [
     NzLayoutModule,
@@ -72,6 +74,7 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
     NzEmptyModule,
     NzCheckboxModule,
     NzSelectModule,
+    NzDatePickerModule,
   ]
 })
 export class SharedModule { }

@@ -72,7 +72,11 @@ export class DemandListComponent implements OnInit {
     {
       name: 'Fecha de recepción',
       sortOrder: null,
-      sortFn: (a: Demand, b: Demand) => a.reception_date.localeCompare(b.reception_date),
+      sortFn: (a: Demand, b: Demand) => {
+        const compare = a.reception_date === b.reception_date ? 0
+          : a.reception_date > b.reception_date ? 1 : -1;
+        return compare;
+      },
       sortDirections: ['ascend', 'descend'],
       searchable: true,
       searchVisible: false,
@@ -163,7 +167,7 @@ export class DemandListComponent implements OnInit {
       page:         [null, [Validators.required]],
       number:       [null, [Validators.required]],
       expedient:    [null, [Validators.nullValidator]],
-      reception_date: [null, [Validators.nullValidator]],
+      reception_date: [null, [Validators.required]],
       content:      [null, [Validators.required]],
       is_anonymous: [null, [Validators.required]],
 
@@ -251,6 +255,43 @@ export class DemandListComponent implements OnInit {
           });
       }
     });
+
+    this.validateForm.get('type_id').valueChanges.subscribe(value => {
+      if (value === 3) {
+        this.validateForm.get('demand_case_id').enable();
+      }
+      else {
+        this.validateForm.get('demand_case_id').disable();
+      }
+    });
+
+    this.validateForm.get('agency_id').valueChanges.subscribe(value => {
+      if (this.topics.length > 0) {
+        this.validateForm.patchValue({topic_id: null}, {emitEvent: true});
+      }
+      this.topics = [];
+      if (isNaN(value)) {
+      } else if (value != null) {
+        this.validateForm.get('topic_id').enable();
+        this.loadingTopics = true;
+        this.agenciesApi.getTopics(value)
+          .subscribe((resp: any) => {
+            this.topics = resp.topics.map((element) => {
+              return {
+                id: element.id,
+                text: element.name
+              };
+            });
+            this.loadingTopics = false;
+          }, error => {
+            this.loadingTopics = false;
+            console.log(error);
+          });
+      }
+      else {
+        this.validateForm.get('topic_id').disable();
+      }
+    });
   }
 
   onSubmit(): void {
@@ -283,8 +324,24 @@ export class DemandListComponent implements OnInit {
           };
         });
         this.loadingTypes = false;
+        this.validateForm.get('type_id').setValue(2);
       }, error => {
         this.loadingTypes = false;
+        console.log(error);
+      });
+
+    this.loadingDemandCases = true;
+    this.demandCasesApi.getDemandCases()
+      .subscribe((resp: any) => {
+        this.demandCases = resp.demand_cases.map((element) => {
+          return {
+            id: element.id,
+            text: element.name
+          };
+        });
+        this.loadingDemandCases = false;
+      }, error => {
+        this.loadingDemandCases = false;
         console.log(error);
       });
 
@@ -313,6 +370,7 @@ export class DemandListComponent implements OnInit {
           };
         });
         this.loadingAgencies = false;
+        this.validateForm.get('topic_id').disable();
       }, error => {
         this.loadingAgencies = false;
         console.log(error);
@@ -360,7 +418,10 @@ export class DemandListComponent implements OnInit {
     this.loading = false;
     const clone = _.cloneDeep(element);
     clone.tmp_phone = '';
-    this.validateForm.setValue(clone);
+    const strDate = element.reception_date.replaceAll('-', '/');
+    const split = strDate.split('/');
+    clone.reception_date = new Date(split[2], split[1] - 1, split[0]);
+    this.validateForm.patchValue(clone);
     this.isEditMode = true;
     this.drawer = true;
   }

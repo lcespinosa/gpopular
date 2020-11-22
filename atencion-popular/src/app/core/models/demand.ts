@@ -10,7 +10,7 @@ export class Demand {
   page: string;
   number: string;
   expedient: string;
-  reception_date: string;
+  reception_date: Date;
   content: string;
   is_anonymous: boolean;
   disabled: boolean;

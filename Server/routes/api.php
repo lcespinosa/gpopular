@@ -58,6 +58,8 @@ $router->group([
     $router->post('/agencies', 'AgencyController@store');
     $router->put('/agencies/{agency}', 'AgencyController@update');
     $router->get('/agencies/{agency}', 'AgencyController@show');
+    $router->get('/agencies/{agency}/topics', 'AgencyController@topics');
+    $router->get('/agencies/{agency}/functionaries', 'AgencyController@functionaries');
     $router->delete('/agencies/{agency}', 'AgencyController@delete');
 
     //TYPES

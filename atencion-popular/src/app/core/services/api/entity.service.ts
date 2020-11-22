@@ -6,6 +6,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 import { Entity } from '../../models/entity';
 import {environment} from '../../../../environments/environment';
+import {Topic} from '../../models/topic';
+import {Functionary} from '../../models/functionary';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -52,6 +54,20 @@ export class EntityService {
     return this.http.delete<Entity>(environment.apiUrl + this.url + `/${id}`)
       .pipe(
         tap(_ => console.log(`deleted agency ${id}`))
+      );
+  }
+
+  getTopics(id: number): Observable<Topic[]> {
+    return this.http.get<Topic[]>(environment.apiUrl + this.url + `/${id}/topics`)
+      .pipe(
+        tap(topics => console.log('fetched topics')),
+      );
+  }
+
+  getFunctionaries(id: number): Observable<Functionary[]> {
+    return this.http.get<Functionary[]>(environment.apiUrl + this.url + `/${id}/functionaries`)
+      .pipe(
+        tap(functionaries => console.log('fetched functionaries')),
       );
   }
 }

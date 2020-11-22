@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class DemandsService {
 
-  url = '/nomenclature/demands';
+  url = '/management/demands';
 
   constructor(private http: HttpClient) { }
 
