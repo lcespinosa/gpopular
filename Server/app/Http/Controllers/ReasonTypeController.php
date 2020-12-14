@@ -19,7 +19,7 @@ class ReasonTypeController extends Controller
 
     public function index()
     {
-        $reason_types = ReasonType::all(['id', 'name']);
+        $reason_types = ReasonType::all();
 
         return response()->json(compact('reason_types'));
     }

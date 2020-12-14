@@ -9,6 +9,7 @@ use App\Models\DemandCase;
 use App\Models\Topic;
 use App\Models\Way;
 use App\Scopes\NotAnonymous;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DemandController extends Controller
@@ -25,7 +26,10 @@ class DemandController extends Controller
 
     public function index()
     {
-        $demands = Demand::with(['contact', 'type', 'way', 'topics', 'demand_case'])
+        $demands = Demand::with([
+            'contact', 'type', 'way', 'topic', 'topic.agency', 'demand_case'
+            , 'replies', 'replies.reason_type', 'replies.functionary', 'replies.result'
+        ])
             ->get();
 
         return response()->json(compact('demands'));
@@ -34,19 +38,19 @@ class DemandController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'type_id'   => 'required|integer|exist:types,id',
-            'way_id'    => 'required|integer|exist:ways,id',
+            'type_id'   => 'required|integer|exists:types,id',
+            'way_id'    => 'required|integer|exists:ways,id',
             'topic_id'    =>  'required',
             'agency_id'    =>  'required',
             'is_anonymous'  => 'required|boolean',
             'contact_id' => 'exclude_unless:is_anonymous,false|required|integer',
             'page'      => 'required|integer',
             'number'    => 'required|integer',
-            'demand_case_id' => 'exclude_unless:type_id,3|required|exist:demand_cases,id',
+            'demand_case_id' => 'exclude_unless:type_id,3|required|exists:demand_cases,id',
         ]);
 
         if ($request->is_anonymous) {
-            $contact = Contact::whithoutScope(NotAnonymous::class)
+            $contact = Contact::withoutGlobalScope(NotAnonymous::class)
                 ->whereAnonymous(true)
                 ->first();
         }
@@ -93,11 +97,12 @@ class DemandController extends Controller
             }
         }
 
+        $reception = Carbon::createFromFormat('Y-m-d', substr($request->reception_date, 0, 10));
         $demand = new Demand([
             'page'              => $request->page,
             'number'            => $request->number,
             'expedient'         => $request->expedient,
-            'reception_date'    => $request->reception_date,
+            'reception_date'    => $reception,
             'content'           => $request->get('content'),
             'is_anonymous'      => $request->is_anonymous,
 

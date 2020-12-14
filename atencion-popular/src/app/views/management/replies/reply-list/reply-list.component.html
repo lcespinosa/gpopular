@@ -1,9 +1,9 @@
-<nz-page-header nzTitle="Casos"
-                nzSubtitle="Aquí podrá gestionar el listado de casos."
+<nz-page-header nzTitle="Demandas"
+                nzSubtitle="Aquí podrá gestionar el listado de demandas."
                 nzBackIcon>
 
   <nz-page-header-extra>
-    <button nz-button (click)="addDemand()"><i nz-icon nzType="plus-circle"></i>Nuevo caso</button>
+    <button nz-button (click)="addDemand()"><i nz-icon nzType="plus-circle"></i>Nuevo</button>
     <button nz-button [disabled]="setOfCheckedId.size === 0" nzType="danger"
             nz-popconfirm nzPopconfirmTitle="¿Está segur@ de borrar estos elementos?"
             (nzOnConfirm)="deleteSelection()">
@@ -12,11 +12,10 @@
   </nz-page-header-extra>
 
   <nz-page-header-content>
-    <nz-table #nestedTable [nzData]="filteredData" [nzLoading]="loading" [nzPageSize]="10"
+    <nz-table #basicTable [nzData]="filteredData" [nzLoading]="loading" [nzPageSize]="10"
               (nzCurrentPageDataChange)="onCurrentPageChanged($event)" nzSize="small">
       <thead>
       <tr>
-        <th></th>
         <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
         <th>Nº</th>
         <th
@@ -37,74 +36,26 @@
       </tr>
       </thead>
       <tbody>
-        <ng-template ngFor let-data let-i="index" [ngForOf]="nestedTable.data">
-          <tr>
-            <td [(nzExpand)]="data.expand"></td>
-            <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-            <td>{{i+1}}</td>
-            <td nzBreakWord>{{data.page}}</td>
-            <td nzBreakWord>{{data.number}}</td>
-            <td nzBreakWord>{{data.expedient}}</td>
-            <td nzBreakWord>{{data.reception_date}}</td>
-            <td>
-              <label nz-checkbox [(ngModel)]="data.is_anonymous" nzDisabled>{{data.is_anonymous ? 'Si' : 'No'}}</label>
-            </td>
-            <td nzBreakWord>{{data?.contact?.name}}</td>
-            <td nzBreakWord>{{data?.contact?.address?.street?.cpopular?.name || '---'}}</td>
-            <td nzBreakWord>{{data?.topic?.agency?.name || '---'}}</td>
-            <td>
-              <i nz-icon nzType="edit"></i><a (click)="editDemand(data)"> Modificar</a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <i nz-icon nzType="plus"></i><a (click)="addReply(data)"> Respuesta</a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <i nz-icon nzType="delete"></i><a nz-popconfirm
-                                                nzPopconfirmTitle="¿Está segur@ de borrar este elemento?"
-                                                (nzOnConfirm)="deleteDemand(data.id)"> Borrar</a>
-            </td>
-          </tr>
-          <tr [nzExpand]="data.expand">
-            <nz-table #innerTable [nzData]="data.replies" nzSize="small" [nzShowPagination]="false">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Fecha enviada</th>
-                  <th>Fecha recibida</th>
-                  <th>Tipo de razón</th>
-                  <th>Resultado</th>
-                  <th>Funcionario</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ng-container *ngFor="let data of innerTable.data">
-                  <tr>
-                    <td [(nzExpand)]="data.expand"></td>
-                    <td>{{ data.send_date }}</td>
-                    <td>{{ data.reply_date }}</td>
-                    <td>{{ data.reason_type.name }}</td>
-                    <td>{{ data.result.name }}</td>
-                    <td>{{ data.functionary.name }}</td>
-                    <td>
-                      <nz-badge [nzStatus]="data.status.value" [nzText]="data.status.text"></nz-badge>
-                    </td>
-                    <td>
-                      <i nz-icon nzType="edit"></i><a (click)="editReply(data)"> Modificar</a>
-                      <nz-divider nzType="vertical"></nz-divider>
-                      <i nz-icon nzType="delete"></i><a nz-popconfirm
-                                                        nzPopconfirmTitle="¿Está segur@ de borrar este elemento?"
-                                                        (nzOnConfirm)="deleteReply(data.id)"> Borrar</a>
-                    </td>
-                  </tr>
-                  <tr [nzExpand]="data.expand">
-                    <strong>Respuesta:</strong>
-                    <p>{{ data.description }}</p>
-                  </tr>
-                </ng-container>
-              </tbody>
-            </nz-table>
-          </tr>
-        </ng-template>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <td>{{i+1}}</td>
+        <td nzBreakWord>{{data.page}}</td>
+        <td nzBreakWord>{{data.number}}</td>
+        <td nzBreakWord>{{data.expedient}}</td>
+        <td nzBreakWord>{{data.reception_date}}</td>
+        <td>
+          <label nz-checkbox [(ngModel)]="data.is_anonymous" nzDisabled>{{data.is_anonymous ? 'Si' : 'No'}}</label>
+        </td>
+        <td nzBreakWord>{{data?.contact?.name}}</td>
+        <td nzBreakWord>{{data?.contact?.address?.street?.cpopular?.name || '---'}}</td>
+        <td>
+          <i nz-icon nzType="edit"></i><a (click)="editDemand(data)"> Modificar</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <i nz-icon nzType="delete"></i><a nz-popconfirm
+                                            nzPopconfirmTitle="¿Está segur@ de borrar este elemento?"
+                                            (nzOnConfirm)="deleteDemand(data.id)"> Borrar</a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
     <nz-dropdown-menu #searchMenu="nzDropdownMenu">
@@ -213,7 +164,7 @@
             <nz-form-label nzRequired>Tipo</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch nzAllowClear
-                         nzPlaceHolder="Seleccione un tipo de caso" formControlName="type_id" [nzLoading]="loadingTypes">
+                         nzPlaceHolder="Seleccione un tipo de demanda" formControlName="type_id" [nzLoading]="loadingTypes">
                 <nz-option *ngFor="let item of types" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -308,7 +259,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Texto</nz-form-label>
             <nz-form-control>
-              <textarea nz-input rows="2" placeholder="Escriba el texto del caso" formControlName="content"></textarea>
+              <textarea nz-input rows="2" placeholder="Escriba el texto de la demanda" formControlName="content"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -319,99 +270,6 @@
             <nz-form-control [nzOffset]="7">
               <button nz-button type="reset" (click)="cancelEdit()">Cancelar</button>
               <button nz-button nzType="primary" type="submit" [disabled]="validateForm.invalid">Guardar</button>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-    </form>
-  </nz-drawer>
-  <nz-drawer [nzClosable]="false" [nzVisible]="replyDrawer" [nzPlacement]="placement"
-             [nzTitle]="replyDrawerTitle" (nzOnClose)="cancelReplyEdit()" [nzWidth]="420">
-    <form nz-form [formGroup]="validateReplyForm" (ngSubmit)="onReplySubmit()">
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label nzRequired>Funcionario</nz-form-label>
-            <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
-                         nzPlaceHolder="Seleccione un funcionario" formControlName="functionary_id" [nzLoading]="loadingFunctionaries">
-                <nz-option *ngFor="let item of functionaries" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label nzRequired>Tipo de razón</nz-form-label>
-            <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
-                         nzPlaceHolder="Seleccione un tipo de razón" formControlName="reason_type_id" [nzLoading]="loadingReasonTypes">
-                <nz-option *ngFor="let item of reasonTypes" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label nzRequired>Tipo de resultado</nz-form-label>
-            <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
-                         nzPlaceHolder="Seleccione un tipo de resultado" formControlName="result_id" [nzLoading]="loadingResult">
-                <nz-option *ngFor="let item of results" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label>Fecha enviada</nz-form-label>
-            <nz-form-control>
-              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="send_date"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label>Fecha recibida</nz-form-label>
-            <nz-form-control>
-              <nz-date-picker
-                nzFormat="dd/MM/yyyy"
-                formControlName="reply_date"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <label nz-checkbox formControlName="accepted">Finaliza</label>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label nzRequired>Respuesta</nz-form-label>
-            <nz-form-control>
-              <textarea nz-input rows="2" placeholder="Escriba la respuesta" formControlName="description"></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-control [nzOffset]="7">
-              <button nz-button type="reset" (click)="cancelReplyEdit()">Cancelar</button>
-              <button nz-button nzType="primary" type="submit" [disabled]="validateReplyForm.invalid">Guardar</button>
             </nz-form-control>
           </nz-form-item>
         </div>

@@ -21,8 +21,10 @@ class Demand extends Model
     ];
 
     protected $casts = [
-        'reception_date'    => 'datetime: d-m-Y',
+        'reception_date'    => 'datetime:d-m-Y',
     ];
+
+//    protected $appends = ['expand'];
 
     public function topic(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -59,5 +61,10 @@ class Demand extends Model
     public function contact()
     {
         return $this->belongsTo(Contact::class);
+    }
+
+    public function getExpandAttribute()
+    {
+        return count($this->replies) > 0;
     }
 }

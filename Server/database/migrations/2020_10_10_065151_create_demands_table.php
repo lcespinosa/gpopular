@@ -18,7 +18,7 @@ class CreateDemandsTable extends Migration
             $table->string('page');
             $table->string('number');
             $table->string('expedient')->nullable();
-            $table->date('reception_date')->nullable();
+            $table->date('reception_date');
             $table->text('content');
             $table->boolean('is_anonymous')->default(false);
 

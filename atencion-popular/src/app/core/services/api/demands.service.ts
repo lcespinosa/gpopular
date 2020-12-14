@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { catchError, tap, map } from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {Demand} from '../../models/demand';
+import {Reply} from '../../models/reply';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -23,6 +24,21 @@ export class DemandsService {
     return this.http.get<Demand[]>(environment.apiUrl + this.url)
       .pipe(
         tap(demand => console.log('fetched demanda')),
+        map((response: any) => {
+          const list = response.demands;
+          const array = [];
+          for (let i = 0; i < list.length; i++) {
+            const demand = Object.assign(new Demand(), list[i]);
+            const replies = list[i].replies;
+            const repliesArray = [];
+            for (let j = 0; j < replies.length; j++) {
+              repliesArray.push(Object.assign(new Reply(), replies[j]));
+            }
+            demand.replies = repliesArray;
+            array.push(demand);
+          }
+          return array;
+        })
       );
   }
 

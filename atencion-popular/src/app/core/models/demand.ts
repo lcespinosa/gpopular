@@ -3,7 +3,7 @@ import {Way} from './way';
 import {DemandCase} from './demand_case';
 import {Contact} from './contact';
 import {Topic} from './topic';
-
+import {Reply} from './reply';
 
 export class Demand {
   id: number;
@@ -26,4 +26,14 @@ export class Demand {
   agency_id: string;
   contact: Contact;
   contact_id: number;
+
+  replies: Reply[];
+
+  _expand: boolean;
+  get expand(): boolean {
+    return this._expand || false;
+  }
+  set expand(value) {
+    this._expand = value;
+  }
 }

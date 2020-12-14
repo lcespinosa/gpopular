@@ -15,30 +15,22 @@ import {DemandCaseService} from '../../../../core/services/api/demand-case.servi
 import {StreetService} from '../../../../core/services/api/street.service';
 import {ContactsService} from '../../../../core/services/api/contacts.service';
 import {TopicService} from '../../../../core/services/api/topic.service';
-import {ReplyService} from '../../../../core/services/api/reply.service';
-import {FunctionaryService} from '../../../../core/services/api/functionary.service';
-import {ReasonTypeService} from '../../../../core/services/api/reason-type.service';
-import {ResultService} from '../../../../core/services/api/result.service';
 
 @Component({
   selector: 'app-demand-list',
-  templateUrl: './demand-list.component.html',
-  styleUrls: ['./demand-list.component.less']
+  templateUrl: './reply-list.component.html',
+  styleUrls: ['./reply-list.component.less']
 })
-export class DemandListComponent implements OnInit {
+export class ReplyListComponent implements OnInit {
 
   data: Demand[] = [];
   filteredData: Demand[] = [];
   listOfCurrentPageData: Demand[] = [];
   loading: boolean;
   validateForm!: FormGroup;
-  validateReplyForm!: FormGroup;
   isEditMode: boolean;
-  isReplyEditMode: boolean;
   drawer: boolean;
-  replyDrawer: boolean;
   drawerTitle: string;
-  replyDrawerTitle: string;
   placement: NzDrawerPlacement = 'right';
   checked = false;
   indeterminate = false;
@@ -125,17 +117,6 @@ export class DemandListComponent implements OnInit {
       data: 'contact.address.street.cpopular.name',
       priority: 1,
     },
-    {
-      name: 'Organismo',
-      sortOrder: null,
-      sortFn: (a: Demand, b: Demand) => a.topic.agency.name.localeCompare(b.topic.agency.name),
-      sortDirections: ['ascend', 'descend'],
-      searchable: true,
-      searchVisible: false,
-      searchValue: '',
-      data: 'agency',
-      priority: 1,
-    },
   ];
   searchValue: string;
   searchColumn: SearchableColumnItem;
@@ -158,15 +139,7 @@ export class DemandListComponent implements OnInit {
   topics = [];
   loadingTopics: boolean;
 
-  functionaries: [];
-  loadingFunctionaries: boolean;
-  reasonTypes: [];
-  loadingReasonTypes: boolean;
-  results: [];
-  loadingResult: boolean;
-
   constructor(private demandsApi: DemandsService,
-              private repliesApi: ReplyService,
               private typesApi: TypesService,
               private waysApi: WayService,
               private cpopularsApi: CpopularsService,
@@ -175,25 +148,20 @@ export class DemandListComponent implements OnInit {
               private streetsApi: StreetService,
               private contactsApi: ContactsService,
               private topicsApi: TopicService,
-              private functionariesApi: FunctionaryService,
-              private reasonTypesApi: ReasonTypeService,
-              private resultsApi: ResultService,
               private fb: FormBuilder,
               private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle(`${environment.appName} - Casos`);
+    this.titleService.setTitle(`${environment.appName} - Demandas`);
     this.createForm();
 
     this.cancelEdit();
-    this.cancelReplyEdit();
     this.updateList();
     this.onChange();
   }
 
   createForm(): void {
     this.isEditMode = false;
-    this.isReplyEditMode = false;
     this.validateForm = this.fb.group({
       id:           [null, [Validators.nullValidator]],
       page:         [null, [Validators.required]],
@@ -219,19 +187,6 @@ export class DemandListComponent implements OnInit {
 
       created_at:   [null, [Validators.nullValidator]],
       updated_at:   [null, [Validators.nullValidator]],
-    });
-
-    this.validateReplyForm = this.fb.group({
-      id: [null, [Validators.nullValidator]],
-      description: [null, [Validators.required]],
-      accepted: [null, [Validators.required]],
-      send_date: [null, [Validators.nullValidator]],
-      reply_date: [null, [Validators.nullValidator]],
-
-      reason_type_id: [null, [Validators.required]],
-      result_id: [null, [Validators.required]],
-      functionary_id: [null, [Validators.required]],
-      demand_id: [null, [Validators.required]],
     });
 
     this.loading = true;
@@ -337,26 +292,6 @@ export class DemandListComponent implements OnInit {
         this.validateForm.get('topic_id').disable();
       }
     });
-
-    this.validateReplyForm.get('demand_id').valueChanges.subscribe(value => {
-      if (isNaN(value) || !value) {
-      } else {
-        this.loadingFunctionaries = true;
-        this.agenciesApi.getFunctionaries(value)
-          .subscribe((resp: any) => {
-            this.functionaries = resp.functionaries.map((element) => {
-              return {
-                id: element.id,
-                text: element.name
-              };
-            });
-            this.loadingFunctionaries = false;
-          }, error => {
-            this.loadingFunctionaries = false;
-            console.log(error);
-          });
-      }
-    });
   }
 
   onSubmit(): void {
@@ -371,10 +306,9 @@ export class DemandListComponent implements OnInit {
   updateList(): void {
     this.loading = true;
     this.demandsApi.getDemands()
-      .subscribe((response: Demand[]) => {
-        this.data = response;
-        this.filteredData = response;
-        console.log(response);
+      .subscribe((response: any) => {
+        this.data = response.demands;
+        this.filteredData = response.demands;
         this.loading = false;
       }, error => {
         this.loading = false;
@@ -471,36 +405,6 @@ export class DemandListComponent implements OnInit {
         this.loadingCpopulars = false;
         console.log(error);
       });
-
-    this.loadingReasonTypes = true;
-    this.reasonTypesApi.getReasonTypes()
-      .subscribe((resp: any) => {
-        this.reasonTypes = resp.reason_types.map((element) => {
-          return {
-            id: element.id,
-            text: element.name
-          };
-        });
-        this.loadingReasonTypes = false;
-      }, error => {
-        this.loadingReasonTypes = false;
-        console.log(error);
-      });
-
-    this.loadingResult = true;
-    this.resultsApi.getResults()
-      .subscribe((resp: any) => {
-        this.results = resp.results.map((element) => {
-          return {
-            id: element.id,
-            text: element.name
-          };
-        });
-        this.loadingResult = false;
-      }, error => {
-        this.loadingResult = false;
-        console.log(error);
-      });
   }
 
   cancelEdit(): void {
@@ -510,7 +414,7 @@ export class DemandListComponent implements OnInit {
   }
 
   editDemand(element: any): void {
-    this.drawerTitle = 'Modificar caso';
+    this.drawerTitle = 'Modificar demanda';
     this.loading = false;
     const clone = _.cloneDeep(element);
     clone.tmp_phone = '';
@@ -536,7 +440,7 @@ export class DemandListComponent implements OnInit {
   }
 
   addDemand(): void {
-    this.drawerTitle = 'Nuevo caso';
+    this.drawerTitle = 'Nueva demanda';
     this.loading = false;
     this.isEditMode = false;
     this.drawer = true;
@@ -710,80 +614,4 @@ export class DemandListComponent implements OnInit {
     }
   }
 
-  addReply(element: any): void {
-    this.replyDrawerTitle = 'Agregar respuesta';
-    this.loading = false;
-    this.validateReplyForm.patchValue({demand_id: element.id}, {emitEvent: true});
-    this.isReplyEditMode = false;
-    this.replyDrawer = true;
-  }
-
-  cancelReplyEdit(): void {
-    this.isReplyEditMode = false;
-    this.replyDrawer = false;
-    this.validateReplyForm.reset();
-  }
-
-  editReply(element: any): void {
-    this.replyDrawerTitle = 'Modificar respuesta';
-    this.loading = false;
-    const clone = _.cloneDeep(element);
-    let split;
-    let strDate = element.send_date?.replaceAll('-', '/');
-    if (strDate) {
-      split = strDate.split('/');
-      clone.send_date = new Date(split[2], split[1] - 1, split[0]);
-    }
-    if (strDate) {
-      strDate = element.reply_date?.replaceAll('-', '/');
-      split = strDate.split('/');
-      clone.reply_date = new Date(split[2], split[1] - 1, split[0]);
-    }
-    this.validateReplyForm.patchValue(clone);
-    this.isReplyEditMode = true;
-    this.replyDrawer = true;
-  }
-
-  onReplySubmit(): void {
-    if (this.isReplyEditMode) {
-      this.updateReply();
-    } else {
-      this.storeReply();
-    }
-    this.cancelReplyEdit();
-  }
-
-  storeReply(): void {
-    this.loading = true;
-    this.repliesApi.addReply(this.validateReplyForm.value)
-      .subscribe((response) => {
-        this.loading = false;
-        this.updateList();
-      });
-  }
-
-  updateReply(): void {
-    this.loading = true;
-    this.repliesApi.updateReply(this.validateReplyForm.get('id').value, this.validateReplyForm.value)
-      .subscribe((response) => {
-        this.loading = false;
-        this.updateList();
-      });
-  }
-
-  deleteReply(id: number): void {
-    this.loading = true;
-    this.repliesApi.deleteReply(id)
-      .subscribe(result => {
-        this.loading = false;
-        this.updateList();
-      });
-  }
-
-  disabledReplyDate = (current: Date): boolean => {
-    // Can not select days before today and today
-    const sendDate = this.validateReplyForm.get('send_date').value;
-    console.log(sendDate, current);
-    return true;
-  }
 }
