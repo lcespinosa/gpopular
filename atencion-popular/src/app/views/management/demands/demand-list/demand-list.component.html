@@ -165,7 +165,7 @@
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label nzRequired>Contacto</nz-form-label>
+            <nz-form-label [nzRequired] = "!validateForm.get('is_anonymous').value">Contacto</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch nzAllowClear
                          nzPlaceHolder="Seleccione un contacto" formControlName="contact_id" [nzLoading]="loadingContacts">

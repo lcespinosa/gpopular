@@ -115,7 +115,7 @@ class StreetController extends Controller
             }
         }
 
-        if ($request->has('first_between_id')) {
+        if ($request->has('first_between_id') && !empty($request->first_between_id)) {
             if (filter_var($request->first_between_id, FILTER_VALIDATE_INT) !== false) {
                 $fstreet = Street::findOrFail($request->first_between_id);
             }
@@ -131,30 +131,27 @@ class StreetController extends Controller
             }
             $street->first_between_id = $fstreet->id;
         }
-        if ($request->has('second_between_id')) {
-            if ($request->has('second_between_id')) {
-                if (filter_var($request->second_between_id, FILTER_VALIDATE_INT) !== false) {
-                    $sstreet = Street::findOrFail($request->second_between_id);
-                }
-                else {
-                    $sstreet = Street::whereName($request->second_between_id)->first();
-                    if (!$sstreet) {
-                        $sstreet = Street::create([
-                            'name'  => $request->second_between_id,
-                            'code'  => next_id(Street::class),
-                            'cpopular_id' => $cpopular->id,
-                        ]);
-                    }
-                }
-                $street->second_between_id = $sstreet->id;
+        if ($request->has('second_between_id') && !empty($request->second_between_id)) {
+            if (filter_var($request->second_between_id, FILTER_VALIDATE_INT) !== false) {
+                $sstreet = Street::findOrFail($request->second_between_id);
             }
+            else {
+                $sstreet = Street::whereName($request->second_between_id)->first();
+                if (!$sstreet) {
+                    $sstreet = Street::create([
+                        'name'  => $request->second_between_id,
+                        'code'  => next_id(Street::class),
+                        'cpopular_id' => $cpopular->id,
+                    ]);
+                }
+            }
+            $street->second_between_id = $sstreet->id;
         }
 
         $street->fill([
             'name'              => $request->name,
-        ]);
-
-        $cpopular->streets()->save($street);
+            'cpopular_id'       => $cpopular->id
+        ])->save();
 
         return response()->json(compact('street'));
     }

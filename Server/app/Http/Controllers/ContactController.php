@@ -33,7 +33,7 @@ class ContactController extends Controller
     {
         $this->validate($request, [
             'name'      => 'required|string|max:50',
-            'street_id' => 'required',
+//            'street_id' => 'required',
             'cpopular_id' => 'required',
         ]);
 
@@ -57,32 +57,38 @@ class ContactController extends Controller
                 ]);
             }
         }
-        if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
-            $street = Street::findOrFail($request->street_id);
-        }
-        else {
-            $street = Street::whereName($request->street_id)->first();
-            if (!$street) {
-                $street = Street::create([
-                    'name'  => $request->street_id,
-                    'code'  => next_id(Street::class),
-                    'cpopular_id'   => $cpopular->id
-                ]);
+        if ($request->has('street_id') && !empty($request->street_id)) {
+            if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
+                $street = Street::findOrFail($request->street_id);
+            } else {
+                $street = Street::whereName($request->street_id)->first();
+                if (!$street) {
+                    $street = Street::create([
+                        'name' => $request->street_id,
+                        'code' => next_id(Street::class),
+                        'cpopular_id' => $cpopular->id
+                    ]);
+                }
             }
         }
-
-        if (isset($street)) {
-            $address = new Address([
-                'building'  => $request->address['building'],
-                'apartment' => $request->address['apartment'],
-                'number'    => $request->address['number'],
-
-                'active'    => true,
-
-                'street_id' => $street->id
+        else {
+            $street = Street::create([
+                'name' => $cpopular->name . ' desconocida',
+                'code' => next_id(Street::class),
+                'cpopular_id' => $cpopular->id
             ]);
-            $contact->address()->save($address);
         }
+
+        $address = new Address([
+            'building'  => $request->address['building'],
+            'apartment' => $request->address['apartment'],
+            'number'    => $request->address['number'],
+
+            'active'    => true,
+
+            'street_id' => $street->id
+        ]);
+        $contact->address()->save($address);
 
         return response()->json(compact('contact'));
     }
@@ -116,18 +122,22 @@ class ContactController extends Controller
                 ]);
             }
         }
-        if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
-            $street = Street::findOrFail($request->street_id);
+        if ($request->has('street_id') && !empty($request->street_id)) {
+            if (filter_var($request->street_id, FILTER_VALIDATE_INT) !== false) {
+                $street = Street::findOrFail($request->street_id);
+            } else {
+                $street = Street::whereName($request->street_id)->first();
+                if (!$street) {
+                    $street = Street::create([
+                        'name' => $request->street_id,
+                        'code' => next_id(Street::class),
+                        'cpopular_id' => $cpopular->id
+                    ]);
+                }
+            }
         }
         else {
-            $street = Street::whereName($request->street_id)->first();
-            if (!$street) {
-                $street = Street::create([
-                    'name'  => $request->street_id,
-                    'code'  => next_id(Street::class),
-                    'cpopular_id'   => $cpopular->id
-                ]);
-            }
+            $street = $cpopular->streets()->first();
         }
 
         if (isset($street)) {

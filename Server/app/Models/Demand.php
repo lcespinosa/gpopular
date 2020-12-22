@@ -18,6 +18,7 @@ class Demand extends Model
         'way_id',
         'demand_case_id',
         'topic_id',
+        'quarter_id',
     ];
 
     protected $casts = [
@@ -61,6 +62,11 @@ class Demand extends Model
     public function contact()
     {
         return $this->belongsTo(Contact::class);
+    }
+
+    public function quarter()
+    {
+        return $this->belongsTo(Quarter::class);
     }
 
     public function getExpandAttribute()

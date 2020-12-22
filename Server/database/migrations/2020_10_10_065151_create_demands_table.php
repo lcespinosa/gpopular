@@ -43,6 +43,10 @@ class CreateDemandsTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->foreignId('quarter_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

@@ -27,8 +27,8 @@ class DemandController extends Controller
     public function index()
     {
         $demands = Demand::with([
-            'contact', 'type', 'way', 'topic', 'topic.agency', 'demand_case'
-            , 'replies', 'replies.reason_type', 'replies.functionary', 'replies.result'
+            'contact', 'contact.address', 'contact.address.street', 'contact.address.street.cpopular','type', 'way',
+            'topic', 'topic.agency', 'demand_case', 'replies', 'replies.reason_type', 'replies.functionary', 'replies.result'
         ])
             ->get();
 
@@ -46,6 +46,7 @@ class DemandController extends Controller
             'contact_id' => 'exclude_unless:is_anonymous,false|required|integer',
             'page'      => 'required|integer',
             'number'    => 'required|integer',
+            'reception_date' => 'required',
             'demand_case_id' => 'exclude_unless:type_id,3|required|exists:demand_cases,id',
         ]);
 
@@ -125,6 +126,11 @@ class DemandController extends Controller
             }
             $demand->demand_case_id = $case->id;
         }
+
+        //Asociar a un trimestre
+        $quarter = get_quarter($reception);
+        $demand->quarter_id = $quarter->id;
+
         $contact->demands()->save($demand);
 
         return response()->json(compact('demand'));

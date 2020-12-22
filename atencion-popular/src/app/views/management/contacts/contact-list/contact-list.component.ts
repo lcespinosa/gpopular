@@ -128,7 +128,7 @@ export class ContactListComponent implements OnInit {
       created_at:   [null, [Validators.nullValidator]],
       updated_at:   [null, [Validators.nullValidator]],
       cpopular_id:  [null, [Validators.required]],
-      street_id:    [null, [Validators.required]],
+      street_id:    [null, [Validators.nullValidator]],
       address:      this.fb.group({
         id:           [null, [Validators.nullValidator]],
         building:     [null, [Validators.nullValidator]],

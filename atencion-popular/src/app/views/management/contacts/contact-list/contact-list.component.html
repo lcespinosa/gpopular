@@ -71,7 +71,7 @@
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Consejo popular</nz-form-label>
+            <nz-form-label nzRequired>Consejo popular</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddCpopularTemplate"
                          nzPlaceHolder="Seleccione un consejo" formControlName="cpopular_id" [nzLoading]="loadingCpopulars">
@@ -145,7 +145,7 @@
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label>Nombre</nz-form-label>
+            <nz-form-label nzRequired>Nombre</nz-form-label>
             <nz-form-control nzErrorTip="Por favor escriba el nombre">
               <input nz-input formControlName="name" type="text">
             </nz-form-control>
