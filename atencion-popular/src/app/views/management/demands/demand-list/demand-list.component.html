@@ -134,17 +134,17 @@
           <nz-form-item>
             <nz-form-label>Consejo popular</nz-form-label>
             <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddCpopularTemplate"
                          nzPlaceHolder="Seleccione un consejo" formControlName="cpopular_id" [nzLoading]="loadingCpopulars">
                 <nz-option *ngFor="let item of cpopulars" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
               </nz-select>
-              <!--<ng-template #renderAddCpopularTemplate>
+              <ng-template #renderAddCpopularTemplate>
                 <nz-divider></nz-divider>
                 <div class="container">
-                  <input type="text" nz-input #inputCpopularElement>
-                  <a class="add-item" (click)="addCpopularItem(inputCpopularElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                  <input type="text" nz-input #cpopularInputElement>
+                  <a class="add-item" (click)="addCpopularItem(cpopularInputElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
                 </div>
-              </ng-template>-->
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -154,10 +154,17 @@
           <nz-form-item>
             <nz-form-label>Calle</nz-form-label>
             <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddStreetTemplate"
                          nzPlaceHolder="Seleccione una calle" formControlName="street_id" [nzLoading]="loadingStreets">
                 <nz-option *ngFor="let item of streets" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
               </nz-select>
+              <ng-template #renderAddStreetTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #streetInputElement>
+                  <a class="add-item" (click)="addStreetItem(streetInputElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                </div>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -167,10 +174,17 @@
           <nz-form-item>
             <nz-form-label [nzRequired] = "!validateForm.get('is_anonymous').value">Contacto</nz-form-label>
             <nz-form-control>
-              <nz-select nzShowSearch nzAllowClear
+              <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderAddContactTemplate"
                          nzPlaceHolder="Seleccione un contacto" formControlName="contact_id" [nzLoading]="loadingContacts">
                 <nz-option *ngFor="let item of contacts" [nzLabel]="item.text" [nzValue]="item.id"></nz-option>
               </nz-select>
+              <ng-template #renderAddContactTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #contactInputElement>
+                  <a class="add-item" (click)="addContactItem(contactInputElement)"><i nz-icon nzType="plus"></i> Nuevo</a>
+                </div>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>

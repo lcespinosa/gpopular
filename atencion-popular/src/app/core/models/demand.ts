@@ -4,6 +4,8 @@ import {DemandCase} from './demand_case';
 import {Contact} from './contact';
 import {Topic} from './topic';
 import {Reply} from './reply';
+import {Street} from './street';
+import {Cpopular} from './cpopulars';
 
 export class Demand {
   id: number;
@@ -25,7 +27,11 @@ export class Demand {
   topic_id: string;
   agency_id: string;
   contact: Contact;
-  contact_id: number;
+  contact_id: string;
+  cpopular: Cpopular;
+  cpopular_id: string;
+  street: Street;
+  street_id: string;
 
   replies: Reply[];
 

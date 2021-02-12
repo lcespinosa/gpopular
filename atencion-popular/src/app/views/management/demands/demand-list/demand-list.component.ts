@@ -205,7 +205,9 @@ export class DemandListComponent implements OnInit {
 
       type:         [null, [Validators.nullValidator]],
       type_id:      [null, [Validators.required]],
+      cpopular:     [null, [Validators.nullValidator]],
       cpopular_id:  [null, [Validators.nullValidator]],
+      street:       [null, [Validators.nullValidator]],
       street_id:    [null, [Validators.nullValidator]],
       contact:      [null, [Validators.nullValidator]],
       contact_id:   [null, [Validators.nullValidator]],
@@ -323,7 +325,7 @@ export class DemandListComponent implements OnInit {
           .subscribe((resp: any) => {
             this.topics = resp.topics.map((element) => {
               return {
-                id: element.id,
+                id: element.code,
                 text: element.name
               };
             });
@@ -632,7 +634,7 @@ export class DemandListComponent implements OnInit {
     this.search();
   }
 
-  /*addCpopularItem(input: HTMLInputElement): void {
+  addCpopularItem(input: HTMLInputElement): void {
     const value = input.value;
     const hasEntity = this.cpopulars.some((item: any) => item.text.indexOf(value) !== -1);
     if (!hasEntity) {
@@ -665,7 +667,7 @@ export class DemandListComponent implements OnInit {
     }
   }
 
-  addTypeItem(input: HTMLInputElement): void {
+  /*addTypeItem(input: HTMLInputElement): void {
     const value = input.value;
     const hasEntity = this.types.some((item: any) => item.text.indexOf(value) !== -1);
     if (!hasEntity) {
@@ -674,8 +676,7 @@ export class DemandListComponent implements OnInit {
         text:       value,
       }];
     }
-  }
-  */
+  }*/
 
   addWayItem(input: HTMLInputElement): void {
     const value = input.value;
